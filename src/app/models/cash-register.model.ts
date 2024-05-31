@@ -1,12 +1,12 @@
+import { CashRegisterDetailModel } from './cash-register-detail.model';
 import { CurrencyTypeModel } from './currency-type.model';
 export class CashRegisterModel {
   id: string = "";
   name: string = "";
-  debt: number = 0;
-  receivable: number = 0;
-  balance: number = 0;
-  description: string = "";
-  date: Date = new Date();
+  depositAmount: number = 0;
+  withdrawalAmount: number = 0;
+  balanceAmount: number = 0;
   currencyType: CurrencyTypeModel = new CurrencyTypeModel();
-  currencyTypeValue: number = 0;
+  currencyTypeValue: number = 1;
+  details: CashRegisterDetailModel[] = [];
 }
