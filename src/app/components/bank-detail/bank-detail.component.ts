@@ -1,28 +1,27 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { CashRegisterModel } from '../../models/cash-register.model';
+import { BankDetailPipe } from '../../pipes/bank-detail.pipe';
+import { SharedModule } from '../../modules/shared.module';
+import { BankModel } from '../../models/bank.model';
+import { BankDetailModel } from '../../models/bank-detail.model';
 import { HttpService } from '../../services/http.service';
 import { SwalService } from '../../services/swal.service';
-import { NgForm } from '@angular/forms';
-import { CashRegisterDetailModel } from '../../models/cash-register-detail.model';
 import { ActivatedRoute } from '@angular/router';
-import { SharedModule } from '../../modules/shared.module';
-import { CashRegisterDetailPipe } from '../../pipes/cash-register-detail.pipe';
 import { DatePipe } from '@angular/common';
-import { BankModel } from '../../models/bank.model';
-
+import { NgForm } from '@angular/forms';
+import { CashRegisterModel } from '../../models/cash-register.model';
 @Component({
-  selector: 'app-cash-register-details',
+  selector: 'app-bank-detail',
   standalone: true,
-  imports: [SharedModule, CashRegisterDetailPipe],
-  templateUrl: './cash-register-details.component.html',
-  styleUrl: './cash-register-details.component.css',
+  imports: [SharedModule, BankDetailPipe],
+  templateUrl: './bank-detail.component.html',
+  styleUrl: './bank-detail.component.css',
   providers: [DatePipe]
 })
-export class CashRegisterDetailsComponent {
-  cashRegister: CashRegisterModel = new CashRegisterModel();
-  cashRegisters: CashRegisterModel[] = [];
-  cashRegisterId: string = "";
+export class BankDetailComponent {
+  bank: BankModel = new BankModel();
   banks: BankModel[] = [];
+  cashRegisters: CashRegisterModel[] = [];
+  bankId: string = "";
   search: string = "";
   startDate: string = "";
   endDate: string = "";
@@ -30,8 +29,8 @@ export class CashRegisterDetailsComponent {
   @ViewChild("createModalCloseBtn") createModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;
   @ViewChild("updateModalCloseBtn") updateModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;
 
-  createModel: CashRegisterDetailModel = new CashRegisterDetailModel();
-  updateModel: CashRegisterDetailModel = new CashRegisterDetailModel();
+  createModel: BankDetailModel = new BankDetailModel();
+  updateModel: BankDetailModel = new BankDetailModel();
 
   constructor(
     private http: HttpService,
@@ -40,34 +39,34 @@ export class CashRegisterDetailsComponent {
     private date: DatePipe
   ) {
     this.activated.params.subscribe(res => {
-      this.cashRegisterId = res["id"];
+      this.bankId = res["id"];
       this.startDate = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
       this.endDate = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
       this.createModel.date = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
-      this.createModel.cashRegisterId = this.cashRegisterId;
+      this.createModel.bankId = this.bankId;
 
       this.getAll();
-      this.getAllCashRegisters();
       this.getAllBanks();
+      this.getAllCashRegisters();
     })
   }
 
   getAll() {
-    this.http.post<CashRegisterModel>("CashRegisterDetails/GetAll",
-      { cashRegisterId: this.cashRegisterId, startDate: this.startDate, endDate: this.endDate }, (res) => {
-        this.cashRegister = res;
+    this.http.post<BankModel>("BankDetails/GetAll",
+      { bankId: this.bankId, startDate: this.startDate, endDate: this.endDate }, (res) => {
+        this.bank = res;
       });
-  }
-
-  getAllCashRegisters() {
-    this.http.post<CashRegisterModel[]>("CashRegisters/GetAll", {}, (res) => {
-      this.cashRegisters = res.filter(p => p.id != this.cashRegisterId);
-    });
   }
 
   getAllBanks() {
     this.http.post<BankModel[]>("Banks/GetAll", {}, (res) => {
-      this.banks = res;
+      this.banks = res.filter(p => p.id != this.bankId);
+    });
+  }
+
+  getAllCashRegisters() {
+    this.http.post<CashRegisterModel[]>("CashRegisters/GetAll", {}, (res) => {
+      this.cashRegisters = res;
     });
   }
 
@@ -80,19 +79,21 @@ export class CashRegisterDetailsComponent {
         this.createModel.oppositeBankId = null;
         this.createModel.oppositeCashRegisterId = null;
       } else if (this.createModel.recordType == 1) {
-        this.createModel.oppositeBankId = null;
-      } else if (this.createModel.recordType == 2) {
         this.createModel.oppositeCashRegisterId = null;
+      } else if (this.createModel.recordType == 2) {
+        this.createModel.oppositeBankId = null;
       }
+
+
 
 
       if (this.createModel.oppositeAmount === 0) this.createModel.oppositeAmount = this.createModel.amount;
 
-      this.http.post<string>("CashRegisterDetails/Create", this.createModel, (res) => {
+      this.http.post<string>("BankDetails/Create", this.createModel, (res) => {
         this.swal.callToast(res);
-        this.createModel = new CashRegisterDetailModel();
+        this.createModel = new BankDetailModel();
         this.createModel.date = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
-        this.createModel.cashRegisterId = this.cashRegisterId;
+        this.createModel.bankId = this.bankId;
 
         this.createModalCloseBtn?.nativeElement.click();
         this.getAll();
@@ -100,16 +101,16 @@ export class CashRegisterDetailsComponent {
     }
   }
 
-  deleteById(model: CashRegisterDetailModel) {
-    this.swal.callSwal("Kasa hareketini Sil?", `${model.date} tarihteki ${model.description} açıklamalı hareketi silmek istiyor musunuz?`, () => {
-      this.http.post<string>("CashRegisterDetails/DeleteById", { id: model.id }, (res) => {
+  deleteById(model: BankDetailModel) {
+    this.swal.callSwal("Hasa hareketini Sil?", `${model.date} tarihteki ${model.description} açıklamalı hareketi silmek istiyor musunuz?`, () => {
+      this.http.post<string>("BankDetails/DeleteBankDetailById", { id: model.id }, (res) => {
         this.getAll();
         this.swal.callToast(res, "info");
       });
     })
   }
 
-  get(model: CashRegisterDetailModel) {
+  get(model: BankDetailModel) {
     this.updateModel = { ...model };
     this.updateModel.amount = this.updateModel.depositAmount + this.updateModel.withdrawalAmount;
     this.updateModel.type = this.updateModel.depositAmount > 0 ? 0 : 1;
@@ -117,7 +118,7 @@ export class CashRegisterDetailsComponent {
 
   update(form: NgForm) {
     if (form.valid) {
-      this.http.post<string>("CashRegisterDetails/Update", this.updateModel, (res) => {
+      this.http.post<string>("BankDetails/Update", this.updateModel, (res) => {
         this.swal.callToast(res, "info");
         this.updateModalCloseBtn?.nativeElement.click();
         this.getAll();
@@ -132,20 +133,21 @@ export class CashRegisterDetailsComponent {
     else return "";
   }
 
-  setOppositeCashRegister() {
-    const cash = this.cashRegisters.find(p => p.id === this.createModel.oppositeCashRegisterId);
-
-    if (cash) {
-      this.createModel.oppositeCashRegister = cash;
-    }
-  }
-
   setOppositeBank() {
     const bank = this.banks.find(p => p.id === this.createModel.oppositeBankId);
 
     if (bank) {
       this.createModel.oppositeBank = bank;
     }
-
   }
+
+  setOppositeCash() {
+    const cash = this.cashRegisters.find(p => p.id === this.createModel.oppositeCashRegisterId);
+
+    if (cash) {
+      this.createModel.oppositeCash = cash;
+    }
+  }
+
 }
+

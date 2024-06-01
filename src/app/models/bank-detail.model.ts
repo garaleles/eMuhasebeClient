@@ -1,23 +1,25 @@
 import { BankModel } from "./bank.model";
 import { CashRegisterModel } from "./cash-register.model";
 
-export class CashRegisterDetailModel {
+export class BankDetailModel {
   id: string = ""
-  cashRegisterId: string = "";
+  bankId: string = "";
   date: string = "";
   type: number = 0;
   amount: number = 0;
   depositAmount: number = 0;
   withdrawalAmount: number = 0;
-  cashRegisterDetailId: string = "";
-  oppositeCashRegisterId: string | any = "";
+  bankDetailId: string = "";
   oppositeBankId: string | any = "";
-  oppositeCashRegister: CashRegisterModel = new CashRegisterModel();
   oppositeBank: BankModel = new BankModel();
   description: string = "";
   oppositeAmount: number = 0;
   recordType: number = 0;
-  bankDetailId: string | any = "";
-  
+  oppositeCashRegisterId: string | any = "";
+  cashRegisterDetailId: string | any = "";
+  oppositeCash: CashRegisterModel = new CashRegisterModel();
+
+
+
 
 }

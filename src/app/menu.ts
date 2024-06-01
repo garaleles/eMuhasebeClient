@@ -31,7 +31,7 @@ export const Menus: MenuModel[] = [
     url: "/users",
     isTitle: false,
     subMenus: [],
-    showThisMenuJustAdmin:true
+    showThisMenuJustAdmin: true
   },
   {
     name: "Şirketler",
@@ -58,6 +58,15 @@ export const Menus: MenuModel[] = [
     subMenus: [],
     showThisMenuJustAdmin: false
   },
+  {
+    name: "Bankalar",
+    icon: "fa-solid fa-bank",
+    url: "/banks",
+    isTitle: false,
+    subMenus: [],
+    showThisMenuJustAdmin: false
+  },
+
 
 
 

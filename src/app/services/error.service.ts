@@ -19,6 +19,10 @@ export class ErrorService {
         this.swal.callToast("API adresine ulaşılamıyor", "error");
         break;
 
+      case 400:
+        this.swal.callToast("Geçersiz istek. Yollanan parametrelerden biri eksik.", "error");
+        break;
+
       case 403:
         let errorMessage = "";
         for (const e of err.error.ErrorMessages) {

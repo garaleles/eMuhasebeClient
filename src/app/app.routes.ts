@@ -10,6 +10,8 @@ import { ConfirmEmailComponent } from './components/confirm-email/confirm-email.
 import { CompaniesComponent } from './components/companies/companies.component';
 import { CashRegistersComponent } from './components/cash-registers/cash-registers.component';
 import { CashRegisterDetailsComponent } from './components/cash-register-details/cash-register-details.component';
+import { BanksComponent } from './components/banks/banks.component';
+import { BankDetailComponent } from './components/bank-detail/bank-detail.component';
 
 export const routes: Routes = [
   {
@@ -50,6 +52,20 @@ export const routes: Routes = [
           }
         ],
 
+      },
+      {
+        path: "banks",
+        children: [
+          {
+            path: "",
+            component: BanksComponent
+          },
+          {
+            path: "details/:id",
+            component: BankDetailComponent
+          }
+
+        ]
       }
 
     ]
