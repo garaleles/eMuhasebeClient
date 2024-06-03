@@ -14,10 +14,12 @@ export class CashRegisterDetailModel {
   oppositeBankId: string | any = "";
   oppositeCashRegister: CashRegisterModel = new CashRegisterModel();
   oppositeBank: BankModel = new BankModel();
+  oppositeCustomerId: string | any = "";
   description: string = "";
   oppositeAmount: number = 0;
   recordType: number = 0;
-  bankDetailId: string | any = "";
-  
+  bankDetailId: string  = "";
+  customerDetailId: string  = "";
+
 
 }

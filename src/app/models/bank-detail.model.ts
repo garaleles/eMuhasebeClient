@@ -18,6 +18,8 @@ export class BankDetailModel {
   oppositeCashRegisterId: string | any = "";
   cashRegisterDetailId: string | any = "";
   oppositeCash: CashRegisterModel = new CashRegisterModel();
+  customerDetailId: string = "";
+  oppositeCustomerId: string | any = "";
 
 
 

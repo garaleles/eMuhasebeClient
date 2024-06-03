@@ -1,14 +1,16 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { BankDetailPipe } from '../../pipes/bank-detail.pipe';
-import { SharedModule } from '../../modules/shared.module';
-import { BankModel } from '../../models/bank.model';
-import { BankDetailModel } from '../../models/bank-detail.model';
-import { HttpService } from '../../services/http.service';
-import { SwalService } from '../../services/swal.service';
-import { ActivatedRoute } from '@angular/router';
-import { DatePipe } from '@angular/common';
-import { NgForm } from '@angular/forms';
-import { CashRegisterModel } from '../../models/cash-register.model';
+import {Component, ElementRef, ViewChild} from '@angular/core';
+import {BankDetailPipe} from '../../pipes/bank-detail.pipe';
+import {SharedModule} from '../../modules/shared.module';
+import {BankModel} from '../../models/bank.model';
+import {BankDetailModel} from '../../models/bank-detail.model';
+import {HttpService} from '../../services/http.service';
+import {SwalService} from '../../services/swal.service';
+import {ActivatedRoute} from '@angular/router';
+import {DatePipe} from '@angular/common';
+import {NgForm} from '@angular/forms';
+import {CashRegisterModel} from '../../models/cash-register.model';
+import {CustomerModel} from "../../models/customer.model";
+
 @Component({
   selector: 'app-bank-detail',
   standalone: true,
@@ -20,6 +22,7 @@ import { CashRegisterModel } from '../../models/cash-register.model';
 export class BankDetailComponent {
   bank: BankModel = new BankModel();
   banks: BankModel[] = [];
+  customers: CustomerModel[] = [];
   cashRegisters: CashRegisterModel[] = [];
   bankId: string = "";
   search: string = "";
@@ -48,12 +51,13 @@ export class BankDetailComponent {
       this.getAll();
       this.getAllBanks();
       this.getAllCashRegisters();
+      this.getAllCustomers();
     })
   }
 
   getAll() {
     this.http.post<BankModel>("BankDetails/GetAll",
-      { bankId: this.bankId, startDate: this.startDate, endDate: this.endDate }, (res) => {
+      {bankId: this.bankId, startDate: this.startDate, endDate: this.endDate}, (res) => {
         this.bank = res;
       });
   }
@@ -70,6 +74,12 @@ export class BankDetailComponent {
     });
   }
 
+  getAllCustomers() {
+    this.http.post<CustomerModel[]>("Customers/GetAll", {}, (res) => {
+      this.customers = res;
+    });
+  }
+
   create(form: NgForm) {
     if (form.valid) {
       this.createModel.amount = +this.createModel.amount;
@@ -78,13 +88,17 @@ export class BankDetailComponent {
       if (this.createModel.recordType == 0) {
         this.createModel.oppositeBankId = null;
         this.createModel.oppositeCashRegisterId = null;
+        this.createModel.oppositeCustomerId = null;
       } else if (this.createModel.recordType == 1) {
         this.createModel.oppositeCashRegisterId = null;
+        this.createModel.oppositeCustomerId = null;
       } else if (this.createModel.recordType == 2) {
         this.createModel.oppositeBankId = null;
+        this.createModel.oppositeCustomerId = null;
+      } else if (this.createModel.recordType == 3) {
+        this.createModel.oppositeBankId = null;
+        this.createModel.oppositeCashRegisterId = null;
       }
-
-
 
 
       if (this.createModel.oppositeAmount === 0) this.createModel.oppositeAmount = this.createModel.amount;
@@ -103,7 +117,7 @@ export class BankDetailComponent {
 
   deleteById(model: BankDetailModel) {
     this.swal.callSwal("Hasa hareketini Sil?", `${model.date} tarihteki ${model.description} açıklamalı hareketi silmek istiyor musunuz?`, () => {
-      this.http.post<string>("BankDetails/DeleteBankDetailById", { id: model.id }, (res) => {
+      this.http.post<string>("BankDetails/DeleteBankDetailById", {id: model.id}, (res) => {
         this.getAll();
         this.swal.callToast(res, "info");
       });
@@ -111,7 +125,7 @@ export class BankDetailComponent {
   }
 
   get(model: BankDetailModel) {
-    this.updateModel = { ...model };
+    this.updateModel = {...model};
     this.updateModel.amount = this.updateModel.depositAmount + this.updateModel.withdrawalAmount;
     this.updateModel.type = this.updateModel.depositAmount > 0 ? 0 : 1;
   }

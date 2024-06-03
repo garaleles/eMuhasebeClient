@@ -12,6 +12,8 @@ import { CashRegistersComponent } from './components/cash-registers/cash-registe
 import { CashRegisterDetailsComponent } from './components/cash-register-details/cash-register-details.component';
 import { BanksComponent } from './components/banks/banks.component';
 import { BankDetailComponent } from './components/bank-detail/bank-detail.component';
+import {CustomerComponent} from "./components/customer/customer.component";
+import {CustomerDetailsComponent} from "./components/customer-details/customer-details.component";
 
 export const routes: Routes = [
   {
@@ -66,7 +68,21 @@ export const routes: Routes = [
           }
 
         ]
+      },
+      {
+        path: "customers",
+        children: [
+          {
+            path: "",
+            component: CustomerComponent
+          },
+          {
+            path: "details/:id",
+            component: CustomerDetailsComponent
+          }
+        ]
       }
+
 
     ]
   }
