@@ -14,6 +14,10 @@ import { BanksComponent } from './components/banks/banks.component';
 import { BankDetailComponent } from './components/bank-detail/bank-detail.component';
 import {CustomerComponent} from "./components/customer/customer.component";
 import {CustomerDetailsComponent} from "./components/customer-details/customer-details.component";
+import {ProductsComponent} from "./components/products/products.component";
+import {CategoriesComponent} from "./components/categories/categories.component";
+import {UnitsComponent} from "./components/units/units.component";
+import {ProductDetailsComponent} from "./components/product-details/product-details.component";
 
 export const routes: Routes = [
   {
@@ -81,9 +85,42 @@ export const routes: Routes = [
             component: CustomerDetailsComponent
           }
         ]
+      },
+      {
+        path: "products",
+        children: [
+          {
+            path: "",
+            component: ProductsComponent
+          },
+          {
+            path: "details/:id",
+            component: ProductDetailsComponent
+          }
+        ]
+      },
+      {
+        path: "categories",
+        children: [
+          {
+            path: "",
+            component: CategoriesComponent
+          },
+
+        ]
+      },
+      {
+        path: "units",
+        children: [
+          {
+            path: "",
+            component: UnitsComponent
+          },
+
+        ]
       }
 
-
     ]
-  }
+  },
+
 ];

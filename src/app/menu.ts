@@ -74,6 +74,30 @@ export const Menus: MenuModel[] = [
     subMenus: [],
     showThisMenuJustAdmin: false
   },
+  {
+    name: "Ürünler",
+    icon: "fa-solid fa-boxes-stacked",
+    url: "/products",
+    isTitle: false,
+    subMenus: [],
+    showThisMenuJustAdmin: false
+  },
+  {
+    name: "Kategoriler",
+    icon: "fa-solid fa-list",
+    url: "/categories",
+    isTitle: false,
+    subMenus: [],
+    showThisMenuJustAdmin: false
+  },
+  {
+    name: "Birimler",
+    icon: "fa-solid fa-unity",
+    url: "/units",
+    isTitle: false,
+    subMenus: [],
+    showThisMenuJustAdmin: false
+  },
 
 
 
