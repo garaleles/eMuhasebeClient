@@ -18,6 +18,7 @@ import {ProductsComponent} from "./components/products/products.component";
 import {CategoriesComponent} from "./components/categories/categories.component";
 import {UnitsComponent} from "./components/units/units.component";
 import {ProductDetailsComponent} from "./components/product-details/product-details.component";
+import {InvoiceComponent} from "./components/invoice/invoice.component";
 
 export const routes: Routes = [
   {
@@ -118,6 +119,10 @@ export const routes: Routes = [
           },
 
         ]
+      },
+      {
+        path: "invoices",
+        component: InvoiceComponent
       }
 
     ]

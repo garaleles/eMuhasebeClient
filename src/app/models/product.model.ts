@@ -10,6 +10,9 @@ export class ProductModel{
   purchasePrice: number=0;
   sellingPrice: number=0;
   description: string='';
+  discountRate: number = 0;
+  purchaseDiscountRate: number = 0;
+  taxRate: number = 0;
   categoryId: string='';
   unitId: string='';
   category: CategoryModel = new CategoryModel();

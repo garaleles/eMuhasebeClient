@@ -7,13 +7,13 @@ export class ProductDetailModel{
   date: string='';
   deposit: number=0;
   withdrawal: number=0;
-  brutTotal: number=0;
-  netTotal: number=0;
-  grandTotal: number=0;
-  discountTotal: number=0;
-  vatTotal: number=0;
-  vatRate: number=0;
-  discountRate: number=0;
   price: number=0;
+  discountRate: number = 0;
+  taxRate: number = 0;
+  brutTotal: number = 0;
+  discountTotal: number = 0;
+  netTotal: number = 0;
+  taxTotal: number = 0;
+  grandTotal: number = 0;
   product: ProductModel = new ProductModel();
 }

@@ -96,24 +96,47 @@
 
           <div class="form-group">
             <label>Alış Fiyatı</label>
-            <input type="number" required [(ngModel)]="createModel.purchasePrice" class="form-control"
+            <input type="number" [(ngModel)]="createModel.purchasePrice" class="form-control"
                    name="purchasePrice">
             <div class="invalid-feedback"></div>
           </div>
 
           <div class="form-group">
             <label>Satış Fiyatı</label>
-            <input type="number" required [(ngModel)]="createModel.sellingPrice" class="form-control"
+            <input type="number"  [(ngModel)]="createModel.sellingPrice" class="form-control"
                    name="sellingPrice">
             <div class="invalid-feedback"></div>
           </div>
 
           <div class="form-group">
             <label>Açıklama</label>
-            <input type="text" required [(ngModel)]="createModel.description" class="form-control"
+            <input type="text"  [(ngModel)]="createModel.description" class="form-control"
                    name="description">
             <div class="invalid-feedback"></div>
           </div>
+
+          <div class="form-group">
+            <label>Kdv Oranı</label>
+            <input type="text"  [(ngModel)]="createModel.taxRate" class="form-control"
+                   name="taxRate">
+            <div class="invalid-feedback"></div>
+          </div>
+
+          <div class="form-group">
+            <label>İsk. Oranı</label>
+            <input type="text"  [(ngModel)]="createModel.discountRate" class="form-control"
+                   name="discountRate">
+            <div class="invalid-feedback"></div>
+          </div>
+
+          <div class="form-group">
+            <label>Alış İsk.Oranı</label>
+            <input type="text"  [(ngModel)]="createModel.purchaseDiscountRate" class="form-control"
+                   name="purchaseDiscountRate">
+            <div class="invalid-feedback"></div>
+          </div>
+
+
 
 
         </div>
@@ -158,22 +181,43 @@
 
           <div class="form-group">
             <label>Alış Fiyatı</label>
-            <input type="number" required [(ngModel)]="updateModel.purchasePrice" class="form-control"
+            <input type="number" [(ngModel)]="updateModel.purchasePrice" class="form-control"
                    name="updatePurchasePrice">
             <div class="invalid-feedback"></div>
           </div>
 
           <div class="form-group mt-2">
             <label>Satış Fiyatı</label>
-            <input type="number" required [(ngModel)]="updateModel.sellingPrice" class="form-control"
+            <input type="number" [(ngModel)]="updateModel.sellingPrice" class="form-control"
                    name="updateSellingPrice">
             <div class="invalid-feedback"></div>
           </div>
 
           <div class="form-group">
             <label>Açıklama</label>
-            <input type="text" required [(ngModel)]="updateModel.description" class="form-control"
+            <input type="text" [(ngModel)]="updateModel.description" class="form-control"
                    name="updateDescription">
+            <div class="invalid-feedback"></div>
+          </div>
+
+          <div class="form-group">
+            <label>Kdv Oranı</label>
+            <input type="text"  [(ngModel)]="updateModel.taxRate" class="form-control"
+                   name="updateTaxRate">
+            <div class="invalid-feedback"></div>
+          </div>
+
+          <div class="form-group">
+            <label>İsk. Oranı</label>
+            <input type="text"  [(ngModel)]="updateModel.discountRate" class="form-control"
+                   name="updateDiscountRate">
+            <div class="invalid-feedback"></div>
+          </div>
+
+          <div class="form-group">
+            <label>Alış İsk.Oranı</label>
+            <input type="text"  [(ngModel)]="updateModel.purchaseDiscountRate" class="form-control"
+                   name="updatePurchaseDiscountRate">
             <div class="invalid-feedback"></div>
           </div>
 

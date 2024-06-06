@@ -1,0 +1,4 @@
+/* CSS dosyanızda bu sınıfı tanımlayın */
+.custom-modal-width {
+  max-width: 50%; /* İstediğiniz genişliği belirleyin */
+}
