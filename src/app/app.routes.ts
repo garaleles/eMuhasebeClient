@@ -19,6 +19,8 @@ import {CategoriesComponent} from "./components/categories/categories.component"
 import {UnitsComponent} from "./components/units/units.component";
 import {ProductDetailsComponent} from "./components/product-details/product-details.component";
 import {InvoiceComponent} from "./components/invoice/invoice.component";
+import {ExpenseComponent} from "./components/expense/expense.component";
+import {ExpenseDetailComponent} from "./components/expense-detail/expense-detail.component";
 
 export const routes: Routes = [
   {
@@ -123,7 +125,20 @@ export const routes: Routes = [
       {
         path: "invoices",
         component: InvoiceComponent
-      }
+      },
+      {
+        path: "expenses",
+        children: [
+          {
+            path: "",
+            component: ExpenseComponent
+          },
+          {
+            path: "details/:id",
+            component: ExpenseDetailComponent
+          }
+        ]
+      },
 
     ]
   },

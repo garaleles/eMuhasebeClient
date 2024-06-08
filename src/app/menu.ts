@@ -106,6 +106,15 @@ export const Menus: MenuModel[] = [
     subMenus: [],
     showThisMenuJustAdmin: false
   },
+  {
+    name: "Giderler",
+    icon: "fa-solid fa-coins",
+    url: "/expenses",
+    isTitle: false,
+    subMenus: [],
+    showThisMenuJustAdmin: false
+  },
+
 
 
 

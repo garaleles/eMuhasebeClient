@@ -1,30 +1,34 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {BankDetailPipe} from '../../pipes/bank-detail.pipe';
-import {SharedModule} from '../../modules/shared.module';
-import {BankModel} from '../../models/bank.model';
-import {BankDetailModel} from '../../models/bank-detail.model';
-import {HttpService} from '../../services/http.service';
-import {SwalService} from '../../services/swal.service';
-import {ActivatedRoute} from '@angular/router';
-import {DatePipe} from '@angular/common';
-import {NgForm} from '@angular/forms';
-import {CashRegisterModel} from '../../models/cash-register.model';
+import {BankModel} from "../../models/bank.model";
+import {CashRegisterModel} from "../../models/cash-register.model";
+import {HttpService} from "../../services/http.service";
+import {SwalService} from "../../services/swal.service";
+import {ActivatedRoute} from "@angular/router";
+import {DatePipe} from "@angular/common";
+import {NgForm} from "@angular/forms";
+import {SharedModule} from "../../modules/shared.module";
+import {ExpenseDetailPipe} from "../../pipes/expense-detail.pipe";
+import {ExpenseModel} from "../../models/expense.model";
+import {ExpenseDetailModel} from "../../models/expense-detail.model";
+import {BankDetailPipe} from "../../pipes/bank-detail.pipe";
 import {CustomerModel} from "../../models/customer.model";
+import {BankDetailModel} from "../../models/bank-detail.model";
+
 
 @Component({
-  selector: 'app-bank-detail',
+  selector: 'app-expense-detail',
   standalone: true,
-  imports: [SharedModule, BankDetailPipe],
-  templateUrl: './bank-detail.component.html',
-  styleUrl: './bank-detail.component.css',
+  imports: [SharedModule, ExpenseDetailPipe],
+  templateUrl: './expense-detail.component.html',
+  styleUrl: './expense-detail.component.css',
   providers: [DatePipe]
 })
-export class BankDetailComponent {
-  bank: BankModel = new BankModel();
+export class ExpenseDetailComponent {
+  expense: ExpenseModel = new ExpenseModel();
+  expenses: ExpenseModel[] = [];
   banks: BankModel[] = [];
-  customers: CustomerModel[] = [];
   cashRegisters: CashRegisterModel[] = [];
-  bankId: string = "";
+  expenseId: string = "";
   search: string = "";
   startDate: string = "";
   endDate: string = "";
@@ -32,8 +36,8 @@ export class BankDetailComponent {
   @ViewChild("createModalCloseBtn") createModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;
   @ViewChild("updateModalCloseBtn") updateModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;
 
-  createModel: BankDetailModel = new BankDetailModel();
-  updateModel: BankDetailModel = new BankDetailModel();
+  createModel: ExpenseDetailModel = new ExpenseDetailModel();
+  updateModel: ExpenseDetailModel = new ExpenseDetailModel();
 
   constructor(
     private http: HttpService,
@@ -42,29 +46,28 @@ export class BankDetailComponent {
     private date: DatePipe
   ) {
     this.activated.params.subscribe(res => {
-      this.bankId = res["id"];
+      this.expenseId = res["id"];
       this.startDate = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
       this.endDate = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
       this.createModel.date = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
-      this.createModel.bankId = this.bankId;
+      this.createModel.expenseId = this.expenseId;
 
       this.getAll();
       this.getAllBanks();
       this.getAllCashRegisters();
-      this.getAllCustomers();
     })
   }
 
   getAll() {
-    this.http.post<BankModel>("BankDetails/GetAll",
-      {bankId: this.bankId, startDate: this.startDate, endDate: this.endDate}, (res) => {
-        this.bank = res;
+    this.http.post<ExpenseModel>("ExpenseDetail/GetAll",
+      {expenseId: this.expenseId, startDate: this.startDate, endDate: this.endDate}, (res) => {
+        this.expense = res;
       });
   }
 
   getAllBanks() {
     this.http.post<BankModel[]>("Banks/GetAll", {}, (res) => {
-      this.banks = res.filter(p => p.id != this.bankId);
+      this.banks = res.filter(p => p.id != this.expenseId);
     });
   }
 
@@ -74,11 +77,7 @@ export class BankDetailComponent {
     });
   }
 
-  getAllCustomers() {
-    this.http.post<CustomerModel[]>("Customers/GetAll", {}, (res) => {
-      this.customers = res;
-    });
-  }
+
 
   create(form: NgForm) {
     if (form.valid) {
@@ -88,26 +87,23 @@ export class BankDetailComponent {
       if (this.createModel.recordType == 0) {
         this.createModel.oppositeBankId = null;
         this.createModel.oppositeCashRegisterId = null;
-        this.createModel.oppositeCustomerId = null;
+
       } else if (this.createModel.recordType == 1) {
         this.createModel.oppositeCashRegisterId = null;
-        this.createModel.oppositeCustomerId = null;
+
       } else if (this.createModel.recordType == 2) {
         this.createModel.oppositeBankId = null;
-        this.createModel.oppositeCustomerId = null;
-      } else if (this.createModel.recordType == 3) {
-        this.createModel.oppositeBankId = null;
-        this.createModel.oppositeCashRegisterId = null;
+
       }
 
 
       if (this.createModel.oppositeAmount === 0) this.createModel.oppositeAmount = this.createModel.amount;
 
-      this.http.post<string>("BankDetails/Create", this.createModel, (res) => {
+      this.http.post<string>("ExpenseDetail/Create", this.createModel, (res) => {
         this.swal.callToast(res);
-        this.createModel = new BankDetailModel();
+        this.createModel = new ExpenseDetailModel();
         this.createModel.date = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
-        this.createModel.bankId = this.bankId;
+        this.createModel.bankId = this.expenseId;
 
         this.createModalCloseBtn?.nativeElement.click();
         this.getAll();
@@ -115,24 +111,23 @@ export class BankDetailComponent {
     }
   }
 
-  deleteById(model: BankDetailModel) {
-    this.swal.callSwal("Banka hareketini Sil?", `${model.date} tarihteki ${model.description} açıklamalı hareketi silmek istiyor musunuz?`, () => {
-      this.http.post<string>("BankDetails/DeleteBankDetailById", {id: model.id}, (res) => {
+  deleteById(model: ExpenseDetailModel) {
+    this.swal.callSwal("Gider hareketini Sil?", `${model.date} tarihteki ${model.description} açıklamalı hareketi silmek istiyor musunuz?`, () => {
+      this.http.post<string>("ExpenseDetail/DeleteExpenseDetailById", {id: model.id}, (res) => {
         this.getAll();
         this.swal.callToast(res, "info");
       });
     })
   }
 
-  get(model: BankDetailModel) {
+  get(model: ExpenseDetailModel) {
     this.updateModel = {...model};
-    this.updateModel.amount = this.updateModel.depositAmount + this.updateModel.withdrawalAmount;
-    this.updateModel.type = this.updateModel.depositAmount > 0 ? 0 : 1;
+    this.updateModel.amount =  this.updateModel.withdrawalAmount;
   }
 
   update(form: NgForm) {
     if (form.valid) {
-      this.http.post<string>("BankDetails/Update", this.updateModel, (res) => {
+      this.http.post<string>("ExpenseDetail/Update", this.updateModel, (res) => {
         this.swal.callToast(res, "info");
         this.updateModalCloseBtn?.nativeElement.click();
         this.getAll();
