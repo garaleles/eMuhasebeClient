@@ -5,6 +5,7 @@ export class ProductDetailModel{
   productId: string='';
   description: string='';
   date: string='';
+  invoiceNumber: string='';
   deposit: number=0;
   withdrawal: number=0;
   price: number=0;

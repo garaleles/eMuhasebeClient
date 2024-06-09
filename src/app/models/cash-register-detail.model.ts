@@ -20,6 +20,7 @@ export class CashRegisterDetailModel {
   recordType: number = 0;
   bankDetailId: string  = "";
   customerDetailId: string  = "";
+  processNumber: string | any = "";
 
 
 }

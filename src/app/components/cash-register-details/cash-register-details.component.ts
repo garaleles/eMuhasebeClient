@@ -163,4 +163,12 @@ export class CashRegisterDetailsComponent {
     }
 
   }
+
+  generateProcessNumber() {
+    // 6 haneli benzersiz bir numara oluştur
+    const uniqueNumber = Math.floor(100000 + Math.random() * 900000);
+
+    // "Kasa-" ile başlayan ve benzersiz numarayı içeren bir string oluştur
+    this.createModel.processNumber = 'Kasa-' + uniqueNumber;
+  }
 }

@@ -3,7 +3,7 @@
   <app-section sectionTitle="{{cashRegister.name}} Kasa Hareketleri">
     <div class="form-group row">
       <div class="col-3">
-        <button class="btn btn-dark" data-toggle="modal" data-target="#createModal">
+        <button class="btn btn-dark" data-toggle="modal" data-target="#createModal" (click)="generateProcessNumber()">
           <i class="fa-solid fa-plus me-1"></i>
           İşlem Ekle
         </button>
@@ -34,6 +34,7 @@
           <tr>
             <th>#</th>
             <th>Tarih</th>
+            <th>İşlem Numarası</th>
             <th>Açıklama</th>
             <th>Giriş</th>
             <th>Çıkış</th>
@@ -45,6 +46,7 @@
           <tr>
             <td>{{$index + 1}}</td>
             <td>{{data.date | date: 'dd.MM.yyyy'}}</td>
+            <td>{{data.processNumber}}</td>
             <td>
               <span class="me-1">{{data.description}} </span>
               @if(data.cashRegisterDetailId || data.bankDetailId || data.customerDetailId){
@@ -87,6 +89,12 @@
           <div class="form-group">
             <label>Tarih</label>
             <input type="date" required [(ngModel)]="createModel.date" class="form-control" name="date">
+            <div class="invalid-feedback"></div>
+          </div>
+
+          <div class="form-group mt-2">
+            <label>İşlem Numarası</label>
+            <input type="text" required [(ngModel)]="createModel.processNumber" class="form-control" name="processNumber">
             <div class="invalid-feedback"></div>
           </div>
 

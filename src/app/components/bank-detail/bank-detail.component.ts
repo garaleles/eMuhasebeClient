@@ -32,6 +32,8 @@ export class BankDetailComponent {
   @ViewChild("createModalCloseBtn") createModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;
   @ViewChild("updateModalCloseBtn") updateModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;
 
+
+
   createModel: BankDetailModel = new BankDetailModel();
   updateModel: BankDetailModel = new BankDetailModel();
 
@@ -54,6 +56,7 @@ export class BankDetailComponent {
       this.getAllCustomers();
     })
   }
+
 
   getAll() {
     this.http.post<BankModel>("BankDetails/GetAll",
@@ -161,6 +164,14 @@ export class BankDetailComponent {
     if (cash) {
       this.createModel.oppositeCash = cash;
     }
+  }
+
+  generateProcessNumber() {
+    // 6 haneli benzersiz bir numara oluştur
+    const uniqueNumber = Math.floor(100000 + Math.random() * 900000);
+
+    // "Banka-" ile başlayan ve benzersiz numarayı içeren bir string oluştur
+    this.createModel.processNumber = 'Banka-' + uniqueNumber;
   }
 
 }

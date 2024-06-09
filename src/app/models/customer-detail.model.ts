@@ -7,6 +7,7 @@ export class CustomerDetailModel{
   description: string = "";
   bankDetailId: string | any = "";
   cacheRegisterDetailId: string  = "";
+  processNumber: string | any = "";
 }
 
 export class CustomerDetailTypeEnum{

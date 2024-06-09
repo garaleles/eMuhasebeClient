@@ -13,6 +13,7 @@ export class ExpenseDetailModel{
   bankDetailId: string = "";
   expenseDetailId: string = "";
   oppositeExpenseId: string = "";
+  processNumber: string | any = "";
   expense: ExpenseModel = new ExpenseModel();
   date: string = "";
   oppositeBankId: string | any = "";

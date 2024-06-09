@@ -20,6 +20,7 @@ export class BankDetailModel {
   oppositeCash: CashRegisterModel = new CashRegisterModel();
   customerDetailId: string = "";
   oppositeCustomerId: string | any = "";
+  processNumber: string | any = "";
 
 
 
