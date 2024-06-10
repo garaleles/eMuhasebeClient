@@ -5,6 +5,7 @@ import {ProductModel} from "../../models/product.model";
 import {SharedModule} from "../../modules/shared.module";
 import {ProductDetailPipe} from "../../pipes/product-detail.pipe";
 import {ExpenseDetailPipe} from "../../pipes/expense-detail.pipe";
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-product-details',
@@ -49,5 +50,25 @@ export class ProductDetailsComponent {
         balance: runningBalance
       };
     });
+  }
+  exportToExcel() {
+    const dataToExport = this.calculateRunningBalance(this.product.details).map((data, index) => {
+      return {
+        '#': index + 1,
+        'Tarih': data.date,
+        'Fatura Numarası': data.invoiceNumber,
+        'Açıklama': data.description,
+        'G.Miktar': data.deposit,
+        'Ç.Miktar': data.withdrawal,
+        'Stok Durumu': data.balance,
+        'Fiyatı(Kdv Dahil)': data.grandTotal / (data.deposit + data.withdrawal),
+        'Toplam Tutar(Kdv Dahil)': data.grandTotal
+      };
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataToExport);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Ürün Hareketleri');
+    XLSX.writeFile(wb, 'Hareket.xlsx');
   }
 }

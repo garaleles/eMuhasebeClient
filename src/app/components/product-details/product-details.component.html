@@ -3,6 +3,10 @@
   <app-section sectionTitle="{{product.name}} Stok Hareketleri">
     <div class="form-group row">
       <div class="col-9">
+        <button class="btn btn-success" (click)="exportToExcel()">
+          <i class="fa-solid fa-file-excel me-1"></i>
+          Excel'e Aktar
+        </button>
       </div>
 
       <div class="col-3">
@@ -36,7 +40,7 @@
           <td>{{ data.withdrawal }}</td>
           <td [ngStyle]="{'color': data.balance < 0 ? 'red' : 'green'}">
             {{ data.balance }}
-            ({{data.balance < 0 ? 'Eksi Bakiye' : 'Stokta Var'}})
+<!--            ({{data.balance < 0 ? 'Eksi Bakiye' : 'Stokta Var'}})-->
           </td>
           <td>{{ (data.grandTotal / (data.deposit + data.withdrawal)) | trCurrency: '₺':true }}</td>
           <td>{{ data.grandTotal | trCurrency: '₺':true }}</td>

@@ -10,6 +10,7 @@ import {SharedModule} from "../../modules/shared.module";
 import {ExpenseDetailPipe} from "../../pipes/expense-detail.pipe";
 import {ExpenseModel} from "../../models/expense.model";
 import {ExpenseDetailModel} from "../../models/expense-detail.model";
+import * as XLSX from "xlsx";
 
 
 
@@ -177,6 +178,24 @@ export class ExpenseDetailComponent {
         balance: runningBalance
       };
     });
+  }
+
+  exportToExcel() {
+    const dataToExport = this.calculateRunningBalance(this.expense.details).map((data, index) => {
+      return {
+        '#': index + 1,
+        'Tarih': data.date,
+        'İşlem Numarası': data.processNumber,
+        'Açıklama': data.description,
+        'Harcama': data.withdrawalAmount,
+        'Bakiye': data.balance,
+      };
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataToExport);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Gider Hareketleri');
+    XLSX.writeFile(wb, 'Gider Hareketleri.xlsx');
   }
 
 }

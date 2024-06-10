@@ -7,6 +7,7 @@ import { HttpService } from '../../services/http.service';
 import { SwalService } from '../../services/swal.service';
 import { NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-cash-registers',
@@ -71,5 +72,23 @@ export class CashRegistersComponent {
     else if (name === "USD") return "$";
     else if (name === "EUR") return "€";
     else return "";
+  }
+
+  exportToExcel() {
+    const dataToExport = (this.cashRegisters).map((data, index) => {
+      return {
+        '#': index + 1,
+        'Kasa Adı': data.name,
+        'Döviz Tipi': data.currencyType.name,
+        'Giriş': data.depositAmount,
+        'Çıkış': data.withdrawalAmount,
+        'Bakiye': (data.depositAmount - data.withdrawalAmount)
+      };
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataToExport);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Kasa Listesi');
+    XLSX.writeFile(wb, 'Kasalar.xlsx');
   }
 }

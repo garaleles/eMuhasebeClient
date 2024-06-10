@@ -6,6 +6,7 @@ import {HttpService} from "../../services/http.service";
 import {SwalService} from "../../services/swal.service";
 import {CustomerPipe} from "../../pipes/customer.pipe";
 import {CustomerModel, CustomerTypes} from "../../models/customer.model";
+import * as XLSX from "xlsx";
 
 
 
@@ -70,6 +71,27 @@ export class CustomerComponent {
         this.getAll();
       });
     }
+  }
+
+  exportToExcel() {
+    const dataToExport = (this.customers).map((data, index) => {
+      return {
+        '#': index + 1,
+        'Cari Adı': data.name,
+        'Cari Tipi': data.type.name,
+        'İlçe / İl': data.district +'/'+ data.city,
+        'Vergi Dairesi': data.taxOffice,
+        'Vergi Numarası': data.taxNumber,
+        'Borç': data.depositAmount,
+        'Alacak': data.withdrawalAmount,
+        'Bakiye': (data.depositAmount - data.withdrawalAmount)
+      };
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataToExport);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Cari Listesi');
+    XLSX.writeFile(wb, 'Cariler.xlsx');
   }
 
 }

@@ -11,6 +11,7 @@ import { DatePipe } from '@angular/common';
 import { BankModel } from '../../models/bank.model';
 import {CustomerModel} from "../../models/customer.model";
 import {ExpenseDetailPipe} from "../../pipes/expense-detail.pipe";
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-cash-register-details',
@@ -186,5 +187,24 @@ export class CashRegisterDetailsComponent {
         balance: runningBalance
       };
     });
+  }
+
+  exportToExcel() {
+    const dataToExport = this.calculateRunningBalance(this.cashRegister.details).map((data, index) => {
+      return {
+        '#': index + 1,
+        'Tarih': data.date,
+        'İşlem Numarası': data.processNumber,
+        'Açıklama': data.description,
+        'Giriş': data.depositAmount,
+        'Çıkış': data.withdrawalAmount,
+        'Bakiye': data.balance,
+      };
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataToExport);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Kasa Hareketleri');
+    XLSX.writeFile(wb, 'Kasa Hareketleri.xlsx');
   }
 }

@@ -5,6 +5,7 @@ import { CustomerModel } from '../../models/customer.model';
 import { HttpService } from '../../services/http.service';
 import { ActivatedRoute } from '@angular/router';
 import {ExpenseDetailPipe} from "../../pipes/expense-detail.pipe";
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-customer-details',
@@ -51,5 +52,27 @@ export class CustomerDetailsComponent {
       };
     });
   }
+
+  exportToExcel() {
+    const dataToExport = this.calculateRunningBalance(this.customer.details).map((data, index) => {
+      return {
+        '#': index + 1,
+        'Tarih': data.date,
+        'İşlem Numarası': data.processNumber,
+        'İşlem Türü': data.type.name,
+        'Açıklama': data.description,
+        'Giriş': data.depositAmount,
+        'Çıkış': data.withdrawalAmount,
+        'Bakiye': data.balance,
+      };
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataToExport);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Cari Hareketleri');
+    XLSX.writeFile(wb, 'Cari Hareketleri.xlsx');
+  }
+
+
 }
 

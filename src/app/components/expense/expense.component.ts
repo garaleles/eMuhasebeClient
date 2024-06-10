@@ -7,6 +7,7 @@ import {SharedModule} from "../../modules/shared.module";
 import {ExpensePipe} from "../../pipes/expense.pipe";
 import {RouterLink} from "@angular/router";
 import {CurrencyTypes} from "../../models/currency-type.model";
+import * as XLSX from "xlsx";
 
 @Component({
   selector: 'app-expense',
@@ -80,5 +81,21 @@ export class ExpenseComponent {
     else if (name === "USD") return "$";
     else if (name === "EUR") return "€";
     else return "";
+  }
+
+  exportToExcel() {
+    const dataToExport = (this.expenses).map((data, index) => {
+      return {
+        '#': index + 1,
+        'Gider Adı': data.name,
+        'Döviz Tipi': data.currencyType.name,
+        'Toplam Harcama Tutarı': data.withdrawalAmount,
+      };
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataToExport);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Gider Listesi');
+    XLSX.writeFile(wb, 'Giderler.xlsx');
   }
 }

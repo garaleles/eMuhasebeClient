@@ -8,6 +8,7 @@ import {ProductPipe} from "../../pipes/product.pipe";
 import {ProductModel} from "../../models/product.model";
 import {CategoryModel} from "../../models/category.model";
 import {UnitModel} from "../../models/unit.model";
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-products',
@@ -93,5 +94,25 @@ export class ProductsComponent {
     }
   }
 
+  exportToExcel() {
+    const dataToExport = (this.products).map((data, index) => {
+      return {
+        '#': index + 1,
+        'Kategori': data.category.name,
+        'Ürün Adı': data.name,
+        'Birim': data.unit.name,
+        'Alış Fiyatı': data.purchasePrice,
+        'Satış Fiyatı': data.sellingPrice,
+        'G.Miktarı': data.deposit,
+        'Ç.Miktarı': data.withdrawal,
+        'Stok Miktarı': (data.deposit - data.withdrawal)
+      };
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataToExport);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Ürün Listesi');
+    XLSX.writeFile(wb, 'Ürünler.xlsx');
+  }
 }
 

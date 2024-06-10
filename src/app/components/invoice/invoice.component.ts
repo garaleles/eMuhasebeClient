@@ -9,6 +9,7 @@ import {CustomerModel} from "../../models/customer.model";
 import {ProductModel} from "../../models/product.model";
 import {InvoiceDetailModel} from "../../models/invoice-detail.model";
 import {DatePipe} from "@angular/common";
+import * as XLSX from "xlsx";
 
 @Component({
   selector: 'app-invoice',
@@ -309,6 +310,23 @@ export class InvoiceComponent {
   }
   onButtonClick() {
     this.onTypeValueChanges();
+  }
+  exportToExcel() {
+    const dataToExport = (this.invoices).map((data, index) => {
+      return {
+        '#': index + 1,
+        'Fatura Tipi': data.type.name,
+        'Cari': data.customer.name,
+        'Fatura Numarası': data.invoiceNumber,
+        'Tarih': data.date,
+        'Tutar': data.amount,
+      };
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataToExport);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Fatura Listesi');
+    XLSX.writeFile(wb, 'Faturalar.xlsx');
   }
 
 }

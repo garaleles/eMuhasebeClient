@@ -7,6 +7,7 @@ import { HttpService } from '../../services/http.service';
 import { SwalService } from '../../services/swal.service';
 import { CurrencyTypes } from '../../models/currency-type.model';
 import { NgForm } from '@angular/forms';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-banks',
@@ -71,5 +72,23 @@ export class BanksComponent {
     else if (name === "USD") return "$";
     else if (name === "EUR") return "€";
     else return "";
+  }
+  exportToExcel() {
+    const dataToExport = (this.banks).map((data, index) => {
+      return {
+        '#': index + 1,
+        'Banka Adı': data.name,
+        'Iban': data.iban,
+        'Döviz Tipi': data.currencyType.name,
+        'Yatırılan': data.depositAmount,
+        'Çekilen': data.withdrawalAmount,
+        'Bakiye': (data.depositAmount - data.withdrawalAmount)
+      };
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataToExport);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Banka Listesi');
+    XLSX.writeFile(wb, 'Bankalar.xlsx');
   }
 }

@@ -11,6 +11,7 @@ import {NgForm} from '@angular/forms';
 import {CashRegisterModel} from '../../models/cash-register.model';
 import {CustomerModel} from "../../models/customer.model";
 import {ExpenseDetailPipe} from "../../pipes/expense-detail.pipe";
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-bank-detail',
@@ -188,6 +189,25 @@ export class BankDetailComponent {
         balance: runningBalance
       };
     });
+  }
+
+  exportToExcel() {
+    const dataToExport = this.calculateRunningBalance(this.bank.details).map((data, index) => {
+      return {
+        '#': index + 1,
+        'Tarih': data.date,
+        'İşlem Numarası': data.processNumber,
+        'Açıklama': data.description,
+        'Giriş': data.depositAmount,
+        'Çıkış': data.withdrawalAmount,
+        'Bakiye': data.balance,
+      };
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataToExport);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Banka Hareketleri');
+    XLSX.writeFile(wb, 'Banka Hareketleri.xlsx');
   }
 
 }
