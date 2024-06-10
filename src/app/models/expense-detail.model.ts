@@ -5,6 +5,7 @@ import {ExpenseModel} from "./expense.model";
 export class ExpenseDetailModel{
   id: string = "";
   withdrawalAmount: number = 0;
+  balance: number = 0;
   description: string = "";
   expenseId: string = "";
   bankId: string = "";

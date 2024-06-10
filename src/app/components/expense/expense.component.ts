@@ -23,10 +23,15 @@ export class ExpenseComponent {
   expenses: ExpenseModel[] = [];
   search: string = "";
   currencyTypes = CurrencyTypes;
+  p: number = 1;
+
+
   @ViewChild("createModalCloseBtn") createModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;
   @ViewChild("updateModalCloseBtn") updateModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;
+
   createModel: ExpenseModel = new ExpenseModel();
   updateModel: ExpenseModel = new ExpenseModel();
+
   constructor(
     private http: HttpService,
     private swal: SwalService

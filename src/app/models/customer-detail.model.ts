@@ -4,6 +4,7 @@ export class CustomerDetailModel{
   date: string = "";
   depositAmount: number = 0;
   withdrawalAmount: number = 0;
+  balance: number = 0;
   description: string = "";
   bankDetailId: string | any = "";
   cacheRegisterDetailId: string  = "";

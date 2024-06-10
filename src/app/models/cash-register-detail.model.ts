@@ -9,6 +9,7 @@ export class CashRegisterDetailModel {
   amount: number = 0;
   depositAmount: number = 0;
   withdrawalAmount: number = 0;
+  balance: number = 0;
   cashRegisterDetailId: string = "";
   oppositeCashRegisterId: string | any = "";
   oppositeBankId: string | any = "";

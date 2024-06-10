@@ -27,6 +27,7 @@ export class InvoiceComponent {
   products: ProductModel[] = [];
   search:string = "";
   invoiceNumberGenerated = false;
+  p: number = 1;
 
 
   @ViewChild("createModalCloseBtn") createModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;

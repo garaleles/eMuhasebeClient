@@ -10,11 +10,12 @@ import {DatePipe} from '@angular/common';
 import {NgForm} from '@angular/forms';
 import {CashRegisterModel} from '../../models/cash-register.model';
 import {CustomerModel} from "../../models/customer.model";
+import {ExpenseDetailPipe} from "../../pipes/expense-detail.pipe";
 
 @Component({
   selector: 'app-bank-detail',
   standalone: true,
-  imports: [SharedModule, BankDetailPipe],
+  imports: [SharedModule, BankDetailPipe, ExpenseDetailPipe],
   templateUrl: './bank-detail.component.html',
   styleUrl: './bank-detail.component.css',
   providers: [DatePipe]
@@ -28,6 +29,7 @@ export class BankDetailComponent {
   search: string = "";
   startDate: string = "";
   endDate: string = "";
+  p: number = 1;
 
   @ViewChild("createModalCloseBtn") createModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;
   @ViewChild("updateModalCloseBtn") updateModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;
@@ -172,6 +174,20 @@ export class BankDetailComponent {
 
     // "Banka-" ile başlayan ve benzersiz numarayı içeren bir string oluştur
     this.createModel.processNumber = 'Banka-' + uniqueNumber;
+  }
+
+  calculateRunningBalance(details: any[]): any[] {
+    let runningBalance = 0; // Yürüyen bakiye değişkeni
+
+    return details.map(detail => {
+      runningBalance += detail.depositAmount - detail.withdrawalAmount;
+
+      // Yeni bir nesne oluşturarak orijinal veriyi değiştirme
+      return {
+        ...detail,
+        balance: runningBalance
+      };
+    });
   }
 
 }

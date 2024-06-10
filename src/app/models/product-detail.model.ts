@@ -8,6 +8,7 @@ export class ProductDetailModel{
   invoiceNumber: string='';
   deposit: number=0;
   withdrawal: number=0;
+  balance: number = 0;
   price: number=0;
   discountRate: number = 0;
   taxRate: number = 0;

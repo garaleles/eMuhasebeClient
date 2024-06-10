@@ -10,11 +10,12 @@ import { CashRegisterDetailPipe } from '../../pipes/cash-register-detail.pipe';
 import { DatePipe } from '@angular/common';
 import { BankModel } from '../../models/bank.model';
 import {CustomerModel} from "../../models/customer.model";
+import {ExpenseDetailPipe} from "../../pipes/expense-detail.pipe";
 
 @Component({
   selector: 'app-cash-register-details',
   standalone: true,
-  imports: [SharedModule, CashRegisterDetailPipe],
+  imports: [SharedModule, CashRegisterDetailPipe, ExpenseDetailPipe],
   templateUrl: './cash-register-details.component.html',
   styleUrl: './cash-register-details.component.css',
   providers: [DatePipe]
@@ -28,6 +29,7 @@ export class CashRegisterDetailsComponent {
   search: string = "";
   startDate: string = "";
   endDate: string = "";
+  p: number = 1;
 
   @ViewChild("createModalCloseBtn") createModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;
   @ViewChild("updateModalCloseBtn") updateModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;
@@ -170,5 +172,19 @@ export class CashRegisterDetailsComponent {
 
     // "Kasa-" ile başlayan ve benzersiz numarayı içeren bir string oluştur
     this.createModel.processNumber = 'Kasa-' + uniqueNumber;
+  }
+
+  calculateRunningBalance(details: any[]): any[] {
+    let runningBalance = 0; // Yürüyen bakiye değişkeni
+
+    return details.map(detail => {
+      runningBalance += detail.depositAmount - detail.withdrawalAmount;
+
+      // Yeni bir nesne oluşturarak orijinal veriyi değiştirme
+      return {
+        ...detail,
+        balance: runningBalance
+      };
+    });
   }
 }

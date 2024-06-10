@@ -20,6 +20,9 @@ import {ProductDetailsComponent} from "./components/product-details/product-deta
 import {InvoiceComponent} from "./components/invoice/invoice.component";
 import {ExpenseComponent} from "./components/expense/expense.component";
 import {ExpenseDetailComponent} from "./components/expense-detail/expense-detail.component";
+import {
+  ProductProfitabilityReportComponent
+} from "./components/product-profitability-report/product-profitability-report.component";
 
 
 export const routes: Routes = [
@@ -139,6 +142,15 @@ export const routes: Routes = [
           }
         ]
       },
+      {
+        path: "reports",
+        children: [
+          {
+            path: "product-profitability-report",
+            component: ProductProfitabilityReportComponent
+          }
+        ]
+      }
 
 
     ]

@@ -114,7 +114,22 @@ export const Menus: MenuModel[] = [
     subMenus: [],
     showThisMenuJustAdmin: false
   },
-
+  {
+    name: "Raporlar",
+    icon: "",
+    url: "",
+    isTitle: true,
+    subMenus: [],
+    showThisMenuJustAdmin: false
+  },
+  {
+    name: "Stok Karlılık Raporu",
+    icon: "fa-solid fa-chart-simple",
+    url: "/reports/product-profitability-report",
+    isTitle: false,
+    subMenus: [],
+    showThisMenuJustAdmin: false
+  },
 
 
 

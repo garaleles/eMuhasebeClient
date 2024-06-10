@@ -10,9 +10,7 @@ import {SharedModule} from "../../modules/shared.module";
 import {ExpenseDetailPipe} from "../../pipes/expense-detail.pipe";
 import {ExpenseModel} from "../../models/expense.model";
 import {ExpenseDetailModel} from "../../models/expense-detail.model";
-import {BankDetailPipe} from "../../pipes/bank-detail.pipe";
-import {CustomerModel} from "../../models/customer.model";
-import {BankDetailModel} from "../../models/bank-detail.model";
+
 
 
 @Component({
@@ -32,6 +30,7 @@ export class ExpenseDetailComponent {
   search: string = "";
   startDate: string = "";
   endDate: string = "";
+  p: number = 1;
 
   @ViewChild("createModalCloseBtn") createModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;
   @ViewChild("updateModalCloseBtn") updateModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;
@@ -156,6 +155,28 @@ export class ExpenseDetailComponent {
     if (cash) {
       this.createModel.oppositeCash = cash;
     }
+  }
+
+  generateProcessNumber() {
+    // 6 haneli benzersiz bir numara oluştur
+    const uniqueNumber = Math.floor(100000 + Math.random() * 900000);
+
+    // "Gider-" ile başlayan ve benzersiz numarayı içeren bir string oluştur
+    this.createModel.processNumber = 'Gider-' + uniqueNumber;
+  }
+
+  calculateRunningBalance(details: any[]): any[] {
+    let runningBalance = 0; // Yürüyen bakiye değişkeni
+
+    return details.map(detail => {
+      runningBalance += detail.withdrawalAmount ;
+
+      // Yeni bir nesne oluşturarak orijinal veriyi değiştirme
+      return {
+        ...detail,
+        balance: runningBalance
+      };
+    });
   }
 
 }
