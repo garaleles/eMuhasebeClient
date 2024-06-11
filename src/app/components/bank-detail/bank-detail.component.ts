@@ -48,8 +48,8 @@ export class BankDetailComponent {
   ) {
     this.activated.params.subscribe(res => {
       this.bankId = res["id"];
-      this.startDate = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
-      this.endDate = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
+      //this.startDate = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
+     // this.endDate = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
       this.createModel.date = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
       this.createModel.bankId = this.bankId;
 
@@ -61,11 +61,17 @@ export class BankDetailComponent {
   }
 
 
-  getAll() {
+  getAllDates() {
     this.http.post<BankModel>("BankDetails/GetAll",
       {bankId: this.bankId, startDate: this.startDate, endDate: this.endDate}, (res) => {
         this.bank = res;
       });
+  }
+
+  getAll() {
+    this.http.post<BankModel>("BankDetails/GetAll", {bankId: this.bankId}, (res) => {
+      this.bank = res;
+    });
   }
 
   getAllBanks() {

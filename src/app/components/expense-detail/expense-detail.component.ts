@@ -47,8 +47,8 @@ export class ExpenseDetailComponent {
   ) {
     this.activated.params.subscribe(res => {
       this.expenseId = res["id"];
-      this.startDate = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
-      this.endDate = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
+      //this.startDate = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
+      //this.endDate = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
       this.createModel.date = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
       this.createModel.expenseId = this.expenseId;
 
@@ -58,11 +58,17 @@ export class ExpenseDetailComponent {
     })
   }
 
-  getAll() {
+  getAllDates() {
     this.http.post<ExpenseModel>("ExpenseDetail/GetAll",
       {expenseId: this.expenseId, startDate: this.startDate, endDate: this.endDate}, (res) => {
         this.expense = res;
       });
+  }
+
+  getAll() {
+    this.http.post<ExpenseModel>("ExpenseDetail/GetAll", {expenseId: this.expenseId}, (res) => {
+      this.expense = res;
+    });
   }
 
   getAllBanks() {

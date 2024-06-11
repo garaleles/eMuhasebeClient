@@ -46,8 +46,8 @@ export class CashRegisterDetailsComponent {
   ) {
     this.activated.params.subscribe(res => {
       this.cashRegisterId = res["id"];
-      this.startDate = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
-      this.endDate = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
+      //this.startDate = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
+      //this.endDate = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
       this.createModel.date = this.date.transform(new Date(), 'yyyy-MM-dd') ?? "";
       this.createModel.cashRegisterId = this.cashRegisterId;
 
@@ -58,11 +58,17 @@ export class CashRegisterDetailsComponent {
     })
   }
 
-  getAll() {
+  getAllDates() {
     this.http.post<CashRegisterModel>("CashRegisterDetails/GetAll",
       { cashRegisterId: this.cashRegisterId, startDate: this.startDate, endDate: this.endDate }, (res) => {
         this.cashRegister = res;
       });
+  }
+
+  getAll() {
+    this.http.post<CashRegisterModel>("CashRegisterDetails/GetAll", { cashRegisterId: this.cashRegisterId }, (res) => {
+      this.cashRegister = res;
+    });
   }
 
   getAllCashRegisters() {
