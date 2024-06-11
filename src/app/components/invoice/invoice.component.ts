@@ -14,6 +14,16 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 
+// `uint8ArrayToBase64` fonksiyonunu burada tanımlayın
+function uint8ArrayToBase64(uint8Array: Uint8Array): string {
+  let binary = '';
+  const len = uint8Array.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(uint8Array[i]);
+  }
+  return btoa(binary);
+}
+
 
 @Component({
   selector: 'app-invoice',
@@ -333,27 +343,89 @@ export class InvoiceComponent {
     XLSX.writeFile(wb, 'Faturalar.xlsx');
   }
 
-exportToPdf() {
-    const dataToExport = (this.invoices).map((data, index) => {
-      return [
-        index + 1,
-        data.type.name,
-        data.customer.name,
-        data.invoiceNumber,
-        data.date,
-        data.amount,
-      ];
-    });
 
-    const doc = new jsPDF();
-    autoTable(doc, {
-      head: [['#', 'Fatura Tipi', 'Cari', 'Fatura Numarası', 'Tarih', 'Tutar']],
-      body: dataToExport,
-    });
 
-    doc.save('Faturalar.pdf');
+
+
+  async loadDejaVuSansFont(doc: jsPDF) {
+    try {
+      const fontUrl = 'assets/fonts/DejaVuSans.ttf';
+      const response = await fetch(fontUrl);
+
+      if (!response.ok) {
+        throw new Error(`Failed to load font from ${fontUrl}: ${response.statusText}`);
+      }
+
+      const font = await response.arrayBuffer();
+      const fontUint8Array = new Uint8Array(font);
+
+      const base64String = uint8ArrayToBase64(fontUint8Array);
+
+      doc.addFileToVFS('DejaVuSans.ttf', base64String);
+      doc.addFont('DejaVuSans.ttf', 'DejaVuSans', 'normal');
+    } catch (error) {
+      console.error('Error loading font:', error);
+    }
   }
 
 
+  async exportToPdf() {
+    const doc = new jsPDF();
+    await this.loadDejaVuSansFont(doc);
+
+    const pageWidth = doc.internal.pageSize.width;
+    const formattedDate = new Date(this.createModel.date).toLocaleDateString('tr-TR');
+
+    // DejaVu Sans fontunu kullan
+    doc.setFont('DejaVuSans');
+
+    // Header
+    doc.setFontSize(16);
+    doc.text('Fatura', pageWidth / 2, 20, { align: 'center' });
+
+    doc.setFontSize(10);
+    doc.text(`Fatura No: ${this.createModel.invoiceNumber}`, 20, 30);
+    doc.text(`Tarih: ${formattedDate}`, 20, 40);
+    doc.text(`Fatura Tipi: ${this.createModel.typeValue == 1 ? 'Alış' : 'Satış'}`, 20, 50);
+    doc.text(`Cari Hesap: ${this.customers.find(c => c.id === this.createModel.customerId)?.name || ''}`, 20, 60);
+
+    // Details Table
+    autoTable(doc, {
+      startY: 70,
+      head: [['#', 'Stok ismi', 'Miktar', 'Fiyat', 'Isk. %', 'Kdv %', 'Brüt Tutar']],
+      body: this.createModel.details.map((d, i) => [
+        i + 1,
+        d.product.name,
+        d.quantity,
+        this.formatCurrency(d.price),
+        d.discountRate,
+        d.taxRate,
+        this.formatCurrency(d.quantity * d.price),
+      ]),
+      styles: { font: 'DejaVuSans', halign: 'left', fontSize: 10 },
+      columnStyles: { 0: { halign: 'center' } }
+    });
+
+    // Footer (Totals)
+    const tableEndY = (doc as any).lastAutoTable.finalY;
+    const rightMargin = 30;
+    doc.setFontSize(10);
+    doc.text(`Brüt Tutar: ${this.formatCurrency(this.calculateBrutTotal())}`, pageWidth - 80 + rightMargin, tableEndY + 20, { align: 'right' });
+    doc.text(`İskonto Tutar: ${this.formatCurrency(this.calculateTotalDiscount())}`, pageWidth - 80 + rightMargin, tableEndY + 30, { align: 'right' });
+    doc.text(`Net Tutar: ${this.formatCurrency(this.calculateNetTotal())}`, pageWidth - 80 + rightMargin, tableEndY + 40, { align: 'right' });
+    doc.text(`Kdv: ${this.formatCurrency(this.calculateTotalTax())}`, pageWidth - 80 + rightMargin, tableEndY + 50, { align: 'right' });
+    doc.text(`Genel Tutar: ${this.formatCurrency(this.calculateGrandTotal())}`, pageWidth - 80 + rightMargin, tableEndY + 60, { align: 'right' });
+
+    doc.save('Fatura.pdf');
+  }
+
+
+  formatCurrency(value: number): string {
+    return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  }
 }
+
+
+
+
 
