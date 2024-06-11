@@ -1,7 +1,7 @@
 <app-blank pageName="Ürünler" [routes]="['Hareketler','Ürünler']">
   <app-section sectionTitle="Ürün Listesi">
     <div class="form-group row">
-      <div class="col-9">
+      <div class="col-2">
         <button class="btn btn-dark" data-toggle="modal" data-target="#createModal">
           <i class="fa-solid fa-plus me-1"></i>
           Ürün Ekle
@@ -11,7 +11,23 @@
           Excel'e Aktar
         </button>
       </div>
-      <div class="col-3">
+      <div class="col-7">
+        <div style="display: flex; align-items: center;">
+          <button class="btn btn-success" (click)="exportTemplate()" >
+            <i class="fa-solid fa-file-excel me-1"></i>
+            K. Şablonu
+          </button>
+          <span style="color: green">Kaydet:</span>
+          <input type="file" (change)="importFile($event)">
+          <button class="btn btn-danger" (click)="exportUpdateTemplate()">
+            <i class="fa-solid fa-file-excel me-1"></i>
+            G. Şablonu
+          </button>
+          <span style="color: red">Güncelle:</span>
+          <input type="file" (change)="importAndUpdateFile($event)">
+        </div>
+      </div>
+      <div class="col-2">
         <input [(ngModel)]="search" type="search" class="form-control" placeholder="Aranacak değer girin...">
       </div>
     </div>

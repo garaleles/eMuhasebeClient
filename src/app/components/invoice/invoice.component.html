@@ -67,17 +67,23 @@
 
 <!-- Create Modal -->
 <div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
+  <div id="completeInvoice" class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <h3 class="modal-title fs-5">Fatura Ekleme Formu</h3>
+
+        <button class="btn btn-dark" (click)="exportToPdf()" style="margin-left: 5px">
+          <i class="fa-solid fa-file-pdf me-1"></i>
+          PDF'e Aktar
+        </button>
+
         <button type="button" #createModalCloseBtn class="btn btn-outline-danger" data-dismiss="modal">
           <i class="fa-solid fa-x"></i>
         </button>
       </div>
       <form formValidate #createForm="ngForm" autocomplete="off" (ngSubmit)="create(createForm)">
         <div class="modal-body">
-          <div class="row">
+          <div id="invoiceInfo" class="row">
             <div class="col-6">
               <div class="form-group">
                 <label>Fatura Tipi</label>
@@ -191,7 +197,7 @@
 
           <hr>
           <div class="form-group mt-2">
-            <table class="table table-hover">
+            <table id="invoiceDetails" class="table table-hover">
               <thead>
               <tr>
                 <th>#</th>
@@ -234,7 +240,7 @@
           </div>
 
           <hr>
-          <div class="row mt-2">
+          <div id="invoiceTotals" class="row mt-2">
 
             <div class="col-2">
               <div class="form-group mt-2" style="text-align: center">
@@ -300,6 +306,7 @@
             <i class="fa-solid fa-save me-1"></i>
             Kaydet
           </button>
+
         </div>
       </form>
     </div>
@@ -315,6 +322,7 @@
         <button type="button" #updateModalCloseBtn class="btn btn-outline-danger" data-dismiss="modal">
           <i class="fa-solid fa-x"></i>
         </button>
+
       </div>
       <form formValidate #updateForm="ngForm" autocomplete="off" (ngSubmit)="update(updateForm)">
         <div class="modal-body">
@@ -427,7 +435,7 @@
 
           <hr>
           <div class="form-group mt-2">
-            <table class="table table-hover">
+            <table id="invoiceTable" class="table table-hover">
               <thead>
               <tr>
                 <th>#</th>
@@ -538,3 +546,5 @@
     </div>
   </div>
 </div>
+
+

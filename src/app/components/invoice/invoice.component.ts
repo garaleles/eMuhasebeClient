@@ -10,6 +10,10 @@ import {ProductModel} from "../../models/product.model";
 import {InvoiceDetailModel} from "../../models/invoice-detail.model";
 import {DatePipe} from "@angular/common";
 import * as XLSX from "xlsx";
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
+
 
 @Component({
   selector: 'app-invoice',
@@ -328,6 +332,28 @@ export class InvoiceComponent {
     XLSX.utils.book_append_sheet(wb, ws, 'Fatura Listesi');
     XLSX.writeFile(wb, 'Faturalar.xlsx');
   }
+
+exportToPdf() {
+    const dataToExport = (this.invoices).map((data, index) => {
+      return [
+        index + 1,
+        data.type.name,
+        data.customer.name,
+        data.invoiceNumber,
+        data.date,
+        data.amount,
+      ];
+    });
+
+    const doc = new jsPDF();
+    autoTable(doc, {
+      head: [['#', 'Fatura Tipi', 'Cari', 'Fatura Numarası', 'Tarih', 'Tutar']],
+      body: dataToExport,
+    });
+
+    doc.save('Faturalar.pdf');
+  }
+
 
 }
 
