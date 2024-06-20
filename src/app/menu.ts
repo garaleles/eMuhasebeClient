@@ -107,6 +107,14 @@ export const Menus: MenuModel[] = [
     showThisMenuJustAdmin: false
   },
   {
+    name: "Çek Bordroları",
+    icon: "fas fa-money-check-alt",
+    url: "/check-register-payrolls",
+    isTitle: false,
+    subMenus: [],
+    showThisMenuJustAdmin: false
+  },
+  {
     name: "Giderler",
     icon: "fa-solid fa-coins",
     url: "/expenses",

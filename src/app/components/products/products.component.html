@@ -15,16 +15,15 @@
         <div style="display: flex; align-items: center;">
           <button class="btn btn-success" (click)="exportTemplate()" >
             <i class="fa-solid fa-file-excel me-1"></i>
-            K. Şablonu
+           Yükleme Şablonu
           </button>
-          <span style="color: green">Kaydet:</span>
-          <input type="file" (change)="importFile($event)">
-          <button class="btn btn-danger" (click)="exportUpdateTemplate()">
+          <input style="margin-left: 5px;" type="file" (change)="importFile($event)">
+
+          <button style="margin-left: 5px" class="btn btn-success" (click)="exportUpdateTemplate()">
             <i class="fa-solid fa-file-excel me-1"></i>
-            G. Şablonu
+            Güncelleme Şablonu
           </button>
-          <span style="color: red">Güncelle:</span>
-          <input type="file" (change)="importAndUpdateFile($event)">
+          <input style="margin-left: 5px;" type="file" (change)="importAndUpdateFile($event)">
         </div>
       </div>
       <div class="col-2">

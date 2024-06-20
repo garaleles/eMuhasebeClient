@@ -23,6 +23,7 @@ import {ExpenseDetailComponent} from "./components/expense-detail/expense-detail
 import {
   ProductProfitabilityReportComponent
 } from "./components/product-profitability-report/product-profitability-report.component";
+import {CheckRegisterPayrollComponent} from "./components/check-register-payroll/check-register-payroll.component";
 
 
 export const routes: Routes = [
@@ -150,7 +151,20 @@ export const routes: Routes = [
             component: ProductProfitabilityReportComponent
           }
         ]
-      }
+      },
+      {
+        path: "check-register-payrolls",
+        children: [
+          {
+            path: "",
+            component: CheckRegisterPayrollComponent
+          },
+          {
+            path: "details/:id",
+            component: CashRegisterDetailsComponent
+          }
+        ]
+      },
 
 
     ]
