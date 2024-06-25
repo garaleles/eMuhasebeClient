@@ -107,7 +107,11 @@ export const Menus: MenuModel[] = [
     showThisMenuJustAdmin: false
   },
   {
+<<<<<<< HEAD
     name: "Çek Bordroları",
+=======
+    name: "Çek Giriş Bordroları",
+>>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
     icon: "fas fa-money-check-alt",
     url: "/check-register-payrolls",
     isTitle: false,
@@ -115,6 +119,17 @@ export const Menus: MenuModel[] = [
     showThisMenuJustAdmin: false
   },
   {
+<<<<<<< HEAD
+=======
+    name: "Çek Çıkış Bordroları",
+    icon: "fas fa-wallet",
+    url: "/chequeissue-payrolls",
+    isTitle: false,
+    subMenus: [],
+    showThisMenuJustAdmin: false
+  },
+  {
+>>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
     name: "Giderler",
     icon: "fa-solid fa-coins",
     url: "/expenses",

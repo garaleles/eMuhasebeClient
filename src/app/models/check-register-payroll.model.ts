@@ -1,6 +1,7 @@
 import {CheckRegisterPayrollDetail} from "./check-register-payroll-detail.model";
 import {CustomerModel} from "./customer.model";
 
+<<<<<<< HEAD
 export class CheckRegisterPayrollType {
   name: string = "";
   value: number = 0;
@@ -9,6 +10,10 @@ export class CheckRegisterPayrollType {
 export class CheckRegisterPayroll {
   id: string = '';  // GUID
   type: CheckRegisterPayrollType = new CheckRegisterPayrollType();
+=======
+export class CheckRegisterPayroll {
+  id: string = '';  // GUID
+>>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
   date: string = '';  // Use ISO string format (yyyy-mm-dd)
   payrollNumber: string = '';
   customerId?: string = '';

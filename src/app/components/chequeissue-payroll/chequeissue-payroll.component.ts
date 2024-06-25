@@ -1,39 +1,30 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import { NgForm } from "@angular/forms";
-import { HttpService } from "../../services/http.service";
-import { SwalService } from "../../services/swal.service";
-<<<<<<< HEAD
-import {CheckRegisterPayroll, CheckRegisterPayrollType} from "../../models/check-register-payroll.model";
-=======
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
-import { DatePipe } from "@angular/common";
-import {SharedModule} from "../../modules/shared.module";
-import {CheckRegisterPayrollPipe} from "../../pipes/check-register-payroll.pipe";
-import {CompanyCheckAccount} from "../../models/company-check-account.model";
-import {CustomerModel} from "../../models/customer.model";
-import {CheckRegisterPayrollDetail} from "../../models/check-register-payroll-detail.model";
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {Check} from "../../models/check.model";
 import {BankModel} from "../../models/bank.model";
 import {CashRegisterModel} from "../../models/cash-register.model";
-<<<<<<< HEAD
-=======
-import {CheckRegisterPayroll} from "../../models/check-register-payroll.model";
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
+import {CustomerModel} from "../../models/customer.model";
+import {HttpService} from "../../services/http.service";
+import {SwalService} from "../../services/swal.service";
+import {SharedModule} from "../../modules/shared.module";
+import {ChequeissuePayrollPipe} from "../../pipes/chequeissue-payroll.pipe";
+import {DatePipe} from "@angular/common";
+import {ChequeissuePayrollModel} from "../../models/chequeissue-payroll.model";
+import {NgForm} from "@angular/forms";
+import {ChequeissuePayrollDetailModel} from "../../models/chequeissue-payroll-detail.model";
 
 @Component({
-  selector: 'app-check-register-payroll',
+  selector: 'app-chequeissue-payroll',
   standalone: true,
-  templateUrl: './check-register-payroll.component.html',
-  styleUrls: ['./check-register-payroll.component.css'],
   imports: [
     SharedModule,
-    CheckRegisterPayrollPipe,
+    ChequeissuePayrollPipe
   ],
-  providers: [DatePipe]
+  providers: [DatePipe],
+  templateUrl: './chequeissue-payroll.component.html',
+  styleUrl: './chequeissue-payroll.component.css'
 })
-export class CheckRegisterPayrollComponent implements OnInit{
-  checkRegisterPayrolls: CheckRegisterPayroll[] = [];
-  companyCheckAccounts: CompanyCheckAccount[] = [];
+export class ChequeissuePayrollComponent {
+  chequeissuePayrolls: ChequeissuePayrollModel[] = [];
   checks: Check[] = [];
   banks: BankModel[] = [];
   cashRegisters: CashRegisterModel[] = [];
@@ -42,18 +33,18 @@ export class CheckRegisterPayrollComponent implements OnInit{
   search: string = "";
   payrollNumberGenerated = false;
   p: number = 1;
-<<<<<<< HEAD
-=======
   isCreating: boolean = true; // Durum değişkeni
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
+  isBankReadonly: boolean = true;
+  isCashRegisterReadonly: boolean = true;
+
 
 
 
   @ViewChild("createModalCloseBtn") createModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;
   @ViewChild("updateModalCloseBtn") updateModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;
 
-  createModel: CheckRegisterPayroll = new CheckRegisterPayroll();
-  updateModel: CheckRegisterPayroll = new CheckRegisterPayroll();
+  createModel: ChequeissuePayrollModel = new ChequeissuePayrollModel();
+  updateModel: ChequeissuePayrollModel = new ChequeissuePayrollModel();
 
   constructor(
     private http: HttpService,
@@ -65,29 +56,21 @@ export class CheckRegisterPayrollComponent implements OnInit{
 
   ngOnInit(): void {
     this.getAll();
-    this.getAllCompanyCheckAccounts();
     this.getAllCustomers();
     this.getAllCheckPortfolios();
     this.getAllBanks();
     this.getAllCashRegisters();
-<<<<<<< HEAD
-=======
     if (this.isCreating) { // Sadece createModel ile ilgili bir işlem yapılıyorsa bordro numarasını oluştur
       this.generatePayrollNumber();
     }
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
   }
 
   getAll() {
-    this.http.post<CheckRegisterPayroll[]>("CheckRegisterPayroll/GetAll", {}, (res) => {
-      this.checkRegisterPayrolls = res;
+    this.http.post<ChequeissuePayrollModel[]>("ChequeissuePayroll/GetAll", {}, (res) => {
+      this.chequeissuePayrolls = res;
     });
   }
-  getAllCompanyCheckAccounts() {
-    this.http.post<CompanyCheckAccount[]>("CompanyCheckAccounts/GetAll", {}, (res) => {
-      this.companyCheckAccounts = res;
-    });
-  }
+
 
   getAllCustomers() {
     this.http.post<CustomerModel[]>("Customers/GetAll", {}, (res) => {
@@ -119,10 +102,6 @@ export class CheckRegisterPayrollComponent implements OnInit{
       const averageMaturityDate = this.calculateAverageMaturity().toISOString().split('T')[0];
 
       const payload = {
-<<<<<<< HEAD
-        typeValue: this.createModel.type.value,
-=======
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
         date: this.createModel.date,
         payrollNumber: this.createModel.payrollNumber,
         customerId: this.createModel.customerId,
@@ -131,8 +110,8 @@ export class CheckRegisterPayrollComponent implements OnInit{
         checkCount: this.createModel.checkCount,
         averageMaturityDate: averageMaturityDate,
         details: this.createModel.details.map(detail => ({
-          id: detail.id || this.generateGuid(),
-          checkRegisterPayrollId: this.generateGuid(),
+          id: detail.id,
+          chequeissuePayrollId: detail.chequeissuePayrollId,
           checkNumber: detail.checkNumber,
           bankName: detail.bankName,
           branchName: detail.branchName,
@@ -142,13 +121,18 @@ export class CheckRegisterPayrollComponent implements OnInit{
           description: detail.description,
           debtor: detail.debtor,
           creditor: detail.creditor,
-          endorser: detail.endorser
+          endorser: detail.endorser,
+          bankId: detail.bankId,
+          cashRegisterId: detail.cashRegisterId,
+          bankDetailId: detail.bankDetailId,
+          cashRegisterDetailId: detail.cashRegisterDetailId,
+          status: detail.status
         }))
       };
 
-      this.http.post<string>("CheckRegisterPayroll/Create", payload, (res) => {
+      this.http.post<string>("ChequeissuePayroll/Create", payload, (res) => {
         this.swal.callToast(res);
-        this.createModel = new CheckRegisterPayroll();
+        this.createModel = new ChequeissuePayrollModel()
         this.createModel.date = this.date.transform(new Date(), "yyyy-MM-dd") ?? "";
         this.createModalCloseBtn?.nativeElement.click();
         this.getAll();
@@ -157,47 +141,30 @@ export class CheckRegisterPayrollComponent implements OnInit{
   }
 
 
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
-  deleteById(model: CheckRegisterPayroll) {
-    this.swal.callSwal("Çek Giriş Bordrosunu Sil?", `${model.id} numaralı çek giriş bordrosunu silmek istiyor musunuz?`, () => {
-      this.http.post<string>("CheckRegisterPayroll/DeleteCheckRegisterPayrollById", { id: model.id }, (res) => {
+  deleteById(model: ChequeissuePayrollModel) {
+    this.swal.callSwal("Çek Çıkış Bordrosunu Sil?", `${model.id} numaralı çek çıkış bordrosunu silmek istiyor musunuz?`, () => {
+      this.http.post<string>("ChequeissuePayroll/DeleteChequeissuePayrollById", { id: model.id }, (res) => {
         this.getAll();
         this.swal.callToast(res, "info");
       });
     })
   }
 
-  get(model: CheckRegisterPayroll) {
-<<<<<<< HEAD
-=======
+  get(model: ChequeissuePayrollModel) {
     this.isCreating = false; // Durum değişkenini güncelleme olarak ayarlayın
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
     this.updateModel = { ...model };
     this.updateModel.averageMaturityDate = model.averageMaturityDate; // Veritabanından alınan ortalama vade değerini atayın
   }
 
   update(form: NgForm) {
     if (form.valid) {
-<<<<<<< HEAD
-      console.log("Gönderilen Model:", JSON.stringify(this.updateModel, null, 2)); // Gönderilen verileri kontrol edin
-=======
-     // console.log("Gönderilen Model:", JSON.stringify(this.updateModel, null, 2)); // Gönderilen verileri kontrol edin
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
+      // console.log("Gönderilen Model:", JSON.stringify(this.updateModel, null, 2)); // Gönderilen verileri kontrol edin
 
       this.updateModel.checkCount = this.updateCalculateCheckCount();
       this.updateModel.payrollAmount = this.updateCalculateTotalAmount();
       this.updateCalculateAverageMaturity(); // Ortalama vade tarihini güncelleyin
 
       const payload = {
-<<<<<<< HEAD
-        typeValue: this.updateModel.type.value,
-=======
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
         date: this.updateModel.date,
         payrollNumber: this.updateModel.payrollNumber,
         customerId: this.updateModel.customerId,
@@ -206,8 +173,8 @@ export class CheckRegisterPayrollComponent implements OnInit{
         checkCount: this.updateModel.checkCount,
         averageMaturityDate: this.updateModel.averageMaturityDate, // Güncel ortalama vade tarihini payload'a ekleyin
         details: this.updateModel.details.map(detail => ({
-          id: detail.id || this.generateGuid(),
-          checkRegisterPayrollId: this.generateGuid(),
+          id: detail.id,
+          chequeissuePayrollId: this.updateModel.id,
           checkNumber: detail.checkNumber,
           bankName: detail.bankName,
           branchName: detail.branchName,
@@ -217,12 +184,17 @@ export class CheckRegisterPayrollComponent implements OnInit{
           description: detail.description,
           debtor: detail.debtor,
           creditor: detail.creditor,
-          endorser: detail.endorser
+          endorser: detail.endorser,
+          bankId: detail.bankId,
+          cashRegisterId: detail.cashRegisterId,
+          bankDetailId: detail.bankDetailId,
+          cashRegisterDetailId: detail.cashRegisterDetailId,
+          status: detail.status
         }))
       };
 
-      this.http.post<string>("CheckRegisterPayroll/DeleteCheckRegisterPayrollById", { id: this.updateModel.id }, (res) => {
-        this.http.post<string>("CheckRegisterPayroll/Create", payload, (res) => {
+      this.http.post<string>("ChequeissuePayroll/DeleteChequeissuePayrollById", { id: this.updateModel.id }, (res) => {
+        this.http.post<string>("ChequeissuePayroll/Create", payload, (res) => {
           this.swal.callToast(res, "info");
           this.updateModalCloseBtn?.nativeElement.click();
           this.getAll();
@@ -236,9 +208,9 @@ export class CheckRegisterPayrollComponent implements OnInit{
 
 
   addDetail() {
-    const detail: CheckRegisterPayrollDetail = {
+    const detail: ChequeissuePayrollDetailModel = {
       id: this.generateGuid(),
-      checkRegisterPayrollId: this.createModel.id, // payrollId'yi doğru şekilde atayın
+      chequeissuePayrollId: this.generateGuid(),
       checkNumber: this.createModel.checkNumber,
       bankName: this.createModel.bankName,
       branchName: this.createModel.branchName,
@@ -248,7 +220,12 @@ export class CheckRegisterPayrollComponent implements OnInit{
       description: this.createModel.description,
       debtor: this.createModel.debtor,
       creditor: this.createModel.creditor,
-      endorser: this.createModel.endorser
+      endorser: this.createModel.endorser,
+      bankId: this.createModel.bankId|| null,
+      cashRegisterId: this.createModel.cashRegisterId|| null,
+      bankDetailId: this.createModel.bankDetailId || null,
+      cashRegisterDetailId: this.createModel.cashRegisterDetailId|| null,
+      status: this.createModel.status.Endorsed
     };
 
     this.createModel.details.push(detail);
@@ -266,22 +243,14 @@ export class CheckRegisterPayrollComponent implements OnInit{
   }
 
 
-// GUID oluşturma fonksiyonu
-  generateGuid(): string {
+  generateGuid() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
   }
 
 
-
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
   removeDetailItem(index: number) {
     this.createModel.details?.splice(index, 1);
   }
@@ -340,30 +309,12 @@ export class CheckRegisterPayrollComponent implements OnInit{
   }
 
   generatePayrollNumber() {
-<<<<<<< HEAD
-    const typeValue = Number(this.createModel.type.value);
     let prefix = '';
-    if (typeValue === 1) {
-      prefix = 'GB-';
-    } else if (typeValue === 2) {
-      prefix = 'ÇB-';
-    }
-=======
-    let prefix = '';
-      prefix = 'GB-';
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
+    prefix = 'ÇB-';
     this.createModel.payrollNumber = prefix + this.generateUniqueNumber(10);
     this.payrollNumberGenerated = true;
   }
 
-<<<<<<< HEAD
-  onTypeValueChanges() {
-    this.payrollNumberGenerated = false; // Bordro tipi değiştiğinde bordro numarasının yeniden oluşturulması gerektiğini belirt
-    this.createModel.payrollNumber = ''; // Bordro numarasını temizle
-
-  }
-
-=======
   openPayroll(): void {
     this.isCreating = true; // Durum değişkenini oluşturuluyor olarak ayarlayın
     // Bordro açma işlemleri...
@@ -372,7 +323,6 @@ export class CheckRegisterPayrollComponent implements OnInit{
 
 
 
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
   updateCalculateCheckCount(): number {
     // Eğer details array tanımlı değilse, 0 döndür.
     if (!this.updateModel.details) {
@@ -421,9 +371,9 @@ export class CheckRegisterPayrollComponent implements OnInit{
   }
 
   addDetailUp() {
-    const detail: CheckRegisterPayrollDetail = {
+    const detail: ChequeissuePayrollDetailModel = {
       id: this.updateModel.id,
-      checkRegisterPayrollId: this.updateModel.id, // payrollId'yi doğru şekilde atayın
+      chequeissuePayrollId: this.updateModel.id, // payrollId'yi doğru şekilde atayın
       checkNumber: this.updateModel.checkNumber,
       bankName: this.updateModel.bankName,
       branchName: this.updateModel.branchName,
@@ -433,11 +383,16 @@ export class CheckRegisterPayrollComponent implements OnInit{
       description: this.updateModel.description,
       debtor: this.updateModel.debtor,
       creditor: this.updateModel.creditor,
-      endorser: this.updateModel.endorser
+      endorser: this.updateModel.endorser,
+      bankId: this.updateModel.bankId,
+      cashRegisterId: this.updateModel.cashRegisterId,
+      bankDetailId: this.updateModel.bankDetailId,
+      cashRegisterDetailId: this.updateModel.cashRegisterDetailId,
+      status: this.updateModel.statusValue
     };
 
-    this.updateModel.details.push(detail);
-    this.updateCalculateAverageMaturity(); // Ortalama vade tarihini güncelleyin
+    this.createModel.details.push(detail);
+
     // Input alanlarını temizle
     this.updateModel.checkNumber = '';
     this.updateModel.bankName = '';
@@ -450,30 +405,40 @@ export class CheckRegisterPayrollComponent implements OnInit{
     this.updateModel.endorser = '';
   }
 
-<<<<<<< HEAD
-  generatePayrollNumberUp() {
-    const typeValue = Number(this.updateModel.type.value);
-    let prefix = '';
-    if (typeValue === 1) {
-      prefix = 'GB-';
-    } else if (typeValue === 2) {
-      prefix = 'ÇB-';
+
+
+  isFormIncomplete() {
+    return !this.createModel.date ||
+      !this.createModel.bankName ||
+      !this.createModel.branchName ||
+      !this.createModel.accountNumber ||
+      !this.createModel.checkNumber ||
+      !this.createModel.amount ||
+      !this.createModel.debtor ||
+      !this.createModel.creditor ||
+      !this.createModel.endorser ||
+      !this.createModel.dueDate;
+  }
+  updateSelects() {
+    switch (Number(this.createModel.statusValue)) {
+      case 1:
+        this.isCashRegisterReadonly = false;
+        this.isBankReadonly = true;
+        break;
+      case 5:
+      case 6:
+        this.isBankReadonly = false;
+        this.isCashRegisterReadonly = true;
+        break;
+      default:
+        this.isBankReadonly = true;
+        this.isCashRegisterReadonly = true;
     }
-    this.updateModel.payrollNumber = prefix + this.generateUniqueNumber(10);
-    this.payrollNumberGenerated = true;
   }
 
-  onTypeValueChangesUp() {
-    this.payrollNumberGenerated = false; // Bordro tipi değiştiğinde bordro numarasının yeniden oluşturulması gerektiğini belirt
-    this.updateModel.payrollNumber = ''; // Bordro numarasını temizle
+  updateCheckDetails(checkId: string) {
+    const selectedCheck = this.checks.find(check => check.id === checkId);
 
-  }
-
-  onCheckChange() {
-    // Seçilen çeki bul
-    const selectedCheck = this.checks.find(check => check.id === this.createModel.checkId);
-
-    // Seçilen çekin bilgilerini createModel'in ilgili alanlarına doldur
     if (selectedCheck) {
       this.createModel.bankName = selectedCheck.bankName;
       this.createModel.branchName = selectedCheck.branchName;
@@ -487,47 +452,4 @@ export class CheckRegisterPayrollComponent implements OnInit{
     }
   }
 
-  isFormIncomplete() {
-    return !this.createModel.type.value ||
-      !this.createModel.date ||
-      !this.createModel.payrollNumber ||
-      !this.createModel.customerId ||
-      !this.createModel.bankName ||
-      !this.createModel.branchName ||
-      !this.createModel.accountNumber ||
-      !this.createModel.checkNumber ||
-      !this.createModel.amount ||
-      !this.createModel.debtor ||
-      !this.createModel.creditor ||
-      !this.createModel.endorser ||
-      !this.createModel.dueDate;
-  }
-
-  protected readonly CheckRegisterPayrollType = CheckRegisterPayrollType;
-=======
-
-
-  isFormIncomplete() {
-     return !this.createModel.date ||
-    !this.createModel.bankName ||
-    !this.createModel.branchName ||
-    !this.createModel.accountNumber ||
-    !this.createModel.checkNumber ||
-    !this.createModel.amount ||
-    !this.createModel.debtor ||
-    !this.createModel.creditor ||
-    !this.createModel.endorser ||
-    !this.createModel.dueDate;
-  }
-
-
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
 }
-
-
-
-
-
-
-
-

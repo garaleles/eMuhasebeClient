@@ -24,6 +24,10 @@ import {
   ProductProfitabilityReportComponent
 } from "./components/product-profitability-report/product-profitability-report.component";
 import {CheckRegisterPayrollComponent} from "./components/check-register-payroll/check-register-payroll.component";
+<<<<<<< HEAD
+=======
+import {ChequeissuePayrollComponent} from "./components/chequeissue-payroll/chequeissue-payroll.component";
+>>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
 
 
 export const routes: Routes = [
@@ -165,6 +169,22 @@ export const routes: Routes = [
           }
         ]
       },
+<<<<<<< HEAD
+=======
+      {
+        path: "chequeissue-payrolls",
+        children: [
+          {
+            path: "",
+            component: ChequeissuePayrollComponent
+          },
+          {
+            path: "details/:id",
+            component: CashRegisterDetailsComponent
+          }
+        ]
+      },
+>>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
 
 
     ]

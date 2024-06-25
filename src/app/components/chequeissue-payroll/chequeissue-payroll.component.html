@@ -1,12 +1,8 @@
-<app-blank pageName="Çek Bordroları" [routes]="['Hareketler','Çek Bordroları']">
-  <app-section sectionTitle="Çek Bordro Listesi">
+<app-blank pageName="Çek Çıkış Bordroları" [routes]="['Hareketler','Çek Çıkış Bordroları']">
+  <app-section sectionTitle="Çek Çıkış Bordro Listesi">
     <div class="form-group row">
       <div class="col-9">
-<<<<<<< HEAD
-        <button class="btn btn-dark" data-toggle="modal" data-target="#createModal">
-=======
         <button (click)="openPayroll()" class="btn btn-dark" data-toggle="modal" data-target="#createModal">
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
           <i class="fa-solid fa-plus me-1"></i>
           Bordro Ekle
         </button>
@@ -24,25 +20,17 @@
           <th>#</th>
           <th>Tarih</th>
           <th>Cari Hesap</th>
-<<<<<<< HEAD
-          <th>Bordro Tipi</th>
-=======
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
           <th>Bordro Numarası</th>
           <th>Bordro Tutarı</th>
           <th>İşlemler</th>
         </tr>
         </thead>
         <tbody>
-          @for (data of checkRegisterPayrolls | checkRegisterPayroll: search; track data) {
+          @for (data of chequeissuePayrolls | chequeissuePayroll: search; track data) {
             <tr>
               <td>{{ $index + 1 }}</td>
               <td>{{ data.date }}</td>
-              <td>{{ data.customer?.name || 'Kayıt Boş' }}</td>
-<<<<<<< HEAD
-              <td>{{ data.type.name }}</td>
-=======
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
+              <td>{{ data.customer.name || 'Kayıt Boş' }}</td>
               <td>{{ data.payrollNumber }}</td>
               <td>{{ data.payrollAmount | trCurrency: '₺': true }}</td>
               <td>
@@ -67,16 +55,7 @@
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-<<<<<<< HEAD
-        <h3 class="modal-title fs-5">Çek Bordrosu Ekleme Formu</h3>
-
-        <!--<button class="btn btn-dark" (click)="exportToPdf()" style="margin-left: 5px">
-          <i class="fa-solid fa-file-pdf me-1"></i>
-          PDF'e Aktar
-        </button>-->
-=======
-        <h3 class="modal-title fs-5">Çek Giriş Bordrosu Ekle</h3>
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
+        <h3 class="modal-title fs-5">Çek Çıkış Bordrosu Ekle</h3>
 
         <button type="button" #createModalCloseBtn class="btn btn-outline-danger" data-dismiss="modal">
           <i class="fa-solid fa-x"></i>
@@ -87,111 +66,23 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-6">
-<<<<<<< HEAD
-              <div class="row">
-                <div class="col-6">
-                  <label>Bordro Türü</label>
-                  <select class="form-control" [(ngModel)]="createModel.type.value"
-                          (ngModelChange)="onTypeValueChanges()" required name="type">
-                    <option [value]="1">Giriş Bordrosu</option>
-                    <option [value]="2">Çıkış Bordrosu</option>
-                  </select>
-                </div>
-                <div class="col-6">
-                  <div class="form-group" *ngIf="createModel.type.value == 2">
-                    <label>İşlem Türü</label>
-                    <select class="form-control" [(ngModel)]="createModel.status" required name="status">
-                      <option [value]="1">Tahsil Edildi</option>
-                      <option [value]="2">Karşılıksız</option>
-                      <option [value]="3">Ciro Et</option>
-                      <option [value]="4">İade Et</option>
-                      <option [value]="5">Bankaya Tahsile Gönder</option>
-                      <option [value]="6">Bankaya Teminata Gönder</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-                <div class="form-group" *ngIf="createModel.type.value == 2">
-                  <label>Portfoydeki Çekler</label>
-                  <select class="form-control" [(ngModel)]="createModel.checkId" (change)="onCheckChange()" required
-                          name="checkId">
-                    <option *ngFor="let check of checks" [value]="check.id">
-                      Borçlusu: {{ check.debtor }} -- Tutar:  {{ check.amount | currency:'₺' }} --
-                      Vade: {{ check.dueDate | date:'dd.MM.yyyy' }}
-                    </option>
-                  </select>
-                </div>
-
-
-              <div class="row" *ngIf="createModel.type.value == 2">
-                <div class="col-6" *ngIf="createModel.status == 5 || createModel.status == 6">
-                  <label>Bankalar</label>
-                  <select class="form-control" [ngModelOptions]="{standalone:true}" [(ngModel)]="createModel.bankId" required>
-                    <option *ngFor="let bank of banks" [value]="bank.id">{{ bank.name }}</option>
-                  </select>
-                </div>
-
-                <div class="col-6" *ngIf="createModel.status == 1">
-                  <label>Kasalar</label>
-                  <select class="form-control" [ngModelOptions]="{standalone:true}" [(ngModel)]="createModel.cashRegisterId" required>
-                    <option *ngFor="let cashRegister of cashRegisters" [value]="cashRegister.id">{{ cashRegister.name }}</option>
-                  </select>
-                </div>
-              </div>
-                </div>
-
-
-
-            <div class="col-6">
-              <div class="row">
-                <div class="col-6">
-                  <div class="form-group">
-                    <label>Bordro Numarası</label>
-                    <input type="text" [(ngModel)]="createModel.payrollNumber" class="form-control"
-                           name="payrollNumber">
-                    <button type="button" (click)="generatePayrollNumber()"
-                            [disabled]="!createModel.type.value || payrollNumberGenerated"
-                            class="btn btn-info w-100 mt-2">
-                      Bordro Numarası Oluştur
-                    </button>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="form-group">
-                    <label>Tarih</label>
-                    <input type="date" required [(ngModel)]="createModel.date" class="form-control" name="date">
-                  </div>
-                </div>
-
-              </div>
-
-              <div class="row">
-                <div class="col-6">
-                  <label>Cari</label>
-                  <select class="form-control" [(ngModel)]="createModel.customerId" required name="customerId">
-                    <option *ngFor="let customer of customers" [value]="customer.id">{{ customer.name }}</option>
-                  </select>
-                </div>
-                <div class="col-6">
-                  <div class="form-group">
-                    <label>Açıklama</label>
-                    <input type="text" [(ngModel)]="createModel.description" class="form-control" name="description">
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-
-=======
               <div class="form-group">
                 <label>Bordro Numarası</label>
-                <input type="text" [(ngModel)]="createModel.payrollNumber" class="form-control" name="payrollNumber">
+                <input type="text" [(ngModel)]="createModel.payrollNumber" class="form-control" readonly name="payrollNumber">
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-3">
+              <label>İşlem Tipi</label>
+              <select class="form-control" [(ngModel)]="createModel.statusValue" required name="statusValue" (change)="updateSelects()">
+                <option [value]=1>Tahsil Edildi</option>
+                <option [value]=2>Karşılıksız</option>
+                <option [value]=3>Ciro</option>
+                <option [value]=4>İade</option>
+                <option [value]=5>Bankaya Tahsile Verildi</option>
+                <option [value]=6>Bankaya Teminata Verildi</option>
+              </select>
+            </div>
+            <div class="col-3">
               <div class="form-group">
                 <label>Tarih</label>
                 <input type="date" required [(ngModel)]="createModel.date" class="form-control" name="date">
@@ -212,67 +103,65 @@
                 <input type="text" [(ngModel)]="createModel.description" class="form-control" name="description">
               </div>
             </div>
+
           </div>
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
+
+          <div class="row">
+            <div class="col-3">
+              <label>Banka</label>
+              <select class="form-control" [(ngModel)]="createModel.bankId"  name="bankId" [disabled]="isBankReadonly">>
+                <option *ngFor="let bank of banks" [value]="bank.id">{{ bank.name }}</option>
+              </select>
+            </div>
+            <div class="col-3">
+              <div class="form-group">
+                <label>Kasa</label>
+                <select class="form-control" [(ngModel)]="createModel.cashRegisterId"  name="cashRegisterId" [disabled]="isCashRegisterReadonly">>
+                  <option *ngFor="let cashRegister of cashRegisters" [value]="cashRegister.id">{{ cashRegister.name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-6">
+              <label>Portfoy Çekleri</label>
+              <select class="form-control" [(ngModel)]="createModel.checkId" required name="checkId" (ngModelChange)="updateCheckDetails(createModel.checkId)">
+                <option *ngFor="let check of checks" [value]="check.id">{{ check.debtor }} -- {{ check.dueDate| date: "dd-MM-yyyy" }} -- {{ check.amount | trCurrency: '₺': true  }}</option>
+              </select>
+            </div>
+          </div>
           <hr>
           <div class="row">
             <div class="col-3">
               <div class="form-group">
                 <label>Banka</label>
-<<<<<<< HEAD
-                <input type="text" [(ngModel)]="createModel.bankName" class="form-control"
-                       [ngModelOptions]="{standalone:true}">
-=======
                 <input type="text" [(ngModel)]="createModel.bankName" class="form-control" [ngModelOptions]="{standalone:true}">
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
                 <div class="invalid-feedback"></div>
               </div>
             </div>
             <div class="col-3">
               <div class="form-group">
                 <label>Şube</label>
-<<<<<<< HEAD
-                <input type="text" [(ngModel)]="createModel.branchName" class="form-control"
-                       [ngModelOptions]="{standalone:true}">
-=======
                 <input type="text" [(ngModel)]="createModel.branchName" class="form-control" [ngModelOptions]="{standalone:true}">
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
                 <div class="invalid-feedback"></div>
               </div>
             </div>
             <div class="col-2">
               <div class="form-group">
                 <label>Hesap No</label>
-<<<<<<< HEAD
-                <input type="text" [(ngModel)]="createModel.accountNumber" class="form-control"
-                       [ngModelOptions]="{standalone:true}">
-=======
                 <input type="text" [(ngModel)]="createModel.accountNumber" class="form-control" [ngModelOptions]="{standalone:true}">
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
                 <div class="invalid-feedback"></div>
               </div>
             </div>
             <div class="col-2">
               <div class="form-group">
                 <label>Çek No</label>
-<<<<<<< HEAD
-                <input type="text" [(ngModel)]="createModel.checkNumber" class="form-control"
-                       [ngModelOptions]="{standalone:true}">
-=======
                 <input type="text" [(ngModel)]="createModel.checkNumber" class="form-control" [ngModelOptions]="{standalone:true}">
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
                 <div class="invalid-feedback"></div>
               </div>
             </div>
             <div class="col-2">
               <div class="form-group">
                 <label>Tutar</label>
-<<<<<<< HEAD
-                <input type="number" [(ngModel)]="createModel.amount" class="form-control"
-                       [ngModelOptions]="{standalone:true}">
-=======
                 <input type="number" [(ngModel)]="createModel.amount" class="form-control" [ngModelOptions]="{standalone:true}">
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
                 <div class="invalid-feedback"></div>
               </div>
             </div>
@@ -281,48 +170,28 @@
             <div class="col-3">
               <div class="form-group">
                 <label>Borçlusu</label>
-<<<<<<< HEAD
-                <input type="text" [(ngModel)]="createModel.debtor" class="form-control"
-                       [ngModelOptions]="{standalone:true}">
-=======
                 <input type="text" [(ngModel)]="createModel.debtor" class="form-control" [ngModelOptions]="{standalone:true}">
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
                 <div class="invalid-feedback"></div>
               </div>
             </div>
             <div class="col-3">
               <div class="form-group">
                 <label>Alacaklısı</label>
-<<<<<<< HEAD
-                <input type="text" [(ngModel)]="createModel.creditor" class="form-control"
-                       [ngModelOptions]="{standalone:true}">
-=======
                 <input type="text" [(ngModel)]="createModel.creditor" class="form-control" [ngModelOptions]="{standalone:true}">
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
                 <div class="invalid-feedback"></div>
               </div>
             </div>
             <div class="col-3">
               <div class="form-group">
                 <label>Ciranta</label>
-<<<<<<< HEAD
-                <input type="text" [(ngModel)]="createModel.endorser" class="form-control"
-                       [ngModelOptions]="{standalone:true}">
-=======
                 <input type="text" [(ngModel)]="createModel.endorser" class="form-control" [ngModelOptions]="{standalone:true}">
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
                 <div class="invalid-feedback"></div>
               </div>
             </div>
             <div class="col-2">
               <div class="form-group">
                 <label>Vade</label>
-<<<<<<< HEAD
-                <input type="date" [(ngModel)]="createModel.dueDate" class="form-control"
-                       [ngModelOptions]="{standalone:true}">
-=======
                 <input type="date" [(ngModel)]="createModel.dueDate" class="form-control" [ngModelOptions]="{standalone:true}">
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
                 <div class="invalid-feedback"></div>
               </div>
             </div>
@@ -411,10 +280,7 @@
           </div>
         </div>
 
-<<<<<<< HEAD
-=======
 
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
         <div class="modal-footer">
           <button type="submit" class="btn btn-dark w-100" [disabled]="!createModel.details.length">Kaydet</button>
         </div>
@@ -424,7 +290,7 @@
 </div>
 
 <!-- Update Modal -->
-<div class="modal fade" id="updateModal" tabindex="-1" aria-hidden="true">
+<!--<div class="modal fade" id="updateModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
@@ -438,19 +304,6 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-6">
-<<<<<<< HEAD
-              <label>Bordro Türü</label>
-              <select class="form-control" [(ngModel)]="updateModel.type.value" required name="updateType">
-                <option [value]="1">Giriş Bordrosu</option>
-                <option [value]="2">Çıkış Bordrosu</option>
-              </select>
-
-              <div class="form-group mt-2">
-                <label>Tarih</label>
-                <input type="date" required [(ngModel)]="updateModel.date" class="form-control" name="updateDate">
-              </div>
-            </div>
-=======
               <div class="form-group">
                 <label>Tarih</label>
                 <input type="date" required [(ngModel)]="updateModel.date" class="form-control" name="updateDate">
@@ -463,24 +316,14 @@
               </div>
             </div>
 
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
             <div class="col-6">
               <div class="form-group">
                 <label>Bordro Numarası</label>
                 <input type="text" class="form-control" readonly name="updatePayrollNumber"
                        [value]="updateModel.payrollNumber">
               </div>
-<<<<<<< HEAD
-              <div class="form-group mt-2">
-                <label>Cari</label>
-                <select class="form-control" [(ngModel)]="updateModel.customerId" required name="updateCustomerId">
-                  <option *ngFor="let customer of customers" [value]="customer.id">{{ customer.name }}</option>
-                </select>
-              </div>
-=======
 
 
->>>>>>> e28ae8e (çek çıkış bordrosu ciro ,delete tamamlandı)
               <div class="form-group">
                 <label>Açıklama</label>
                 <input type="text" [(ngModel)]="updateModel.description" class="form-control" name="updateDescription">
@@ -659,5 +502,5 @@
       </form>
     </div>
   </div>
-</div>
+</div>-->
 
